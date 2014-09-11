@@ -1,8 +1,9 @@
 # Description:
-#   get tends
+#   get trends from Google Trends
 #
 # Commands:
-#   hubot trends jp
+#   hubot trends {Country_code by 2chars (jp, us, in......)}
+#
 
 request = require 'request'
 
