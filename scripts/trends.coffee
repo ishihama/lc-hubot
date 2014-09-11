@@ -2,7 +2,8 @@
 #   get trends from Google Trends
 #
 # Commands:
-#   hubot trends {Country_code by 2chars (jp, us, in......)}
+#   hubot trends {Country_code by 2chars (jp, us, in......)}.
+#   hubot trends help - for lookup country codes.
 #
 
 request = require 'request'
@@ -157,7 +158,7 @@ getRegion = (id, regions) ->
 
 
 module.exports = (robot) ->
-  robot.respond /trends( ([a-zA-Z]+))/i, (msg) ->
+  robot.respond /trends( ([a-zA-Z]{2}))/i, (msg) ->
     region = getRegion(msg.match[2], regions)
     options =
       url: 'http://www.google.com/trends/hottrends/hotItems'
@@ -175,4 +176,10 @@ module.exports = (robot) ->
       for trends in trendsByDate.trendsList
         text += '\n' + (i++) + ': ' + trends.title
       msg.send text
+
+  robot.respond /trends help/i, (msg) ->
+    text = ''
+    for rid, region of regions
+      text += '\n' + rid + ': ' + region.name
+    msg.send text
 
