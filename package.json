@@ -27,6 +27,7 @@
     "hubot-scripts": ">= 2.5.0 < 3.0.0",
     "hubot-slack": "^2.2.0",
     "hubot-tabelog": "0.0.4",
+    "hubot-todos": "0.0.5",
     "request": "^2.42.0"
   },
   "engines": {
