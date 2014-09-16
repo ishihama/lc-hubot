@@ -5,6 +5,12 @@
 #   hubot curry {areaName}
 #
 
+request = require 'request'
+
+if proxy = process.env.HUBOT_TABELOG_PROXY
+  console.log 'proxy: ' + proxy
+  request = request.defaults {'proxy': proxy}
+
 module.exports = (robot) ->
   robot.respond /curry( (.*))/i, (msg) ->
     # getting areacode
@@ -12,9 +18,10 @@ module.exports = (robot) ->
       "key": process.env.WEBSERVICE_RECRUIT_APIKEY,
       "keyword": msg.match[2],
       "format": "json"
-    msg.http "http://webservice.recruit.co.jp/hotpepper/small_area/v1/"
-      .query(small_area_q)
-      .get() (err, res, body) ->
+    request
+      url: "http://webservice.recruit.co.jp/hotpepper/small_area/v1/",
+      qs: small_area_q,
+      (err, res, body) ->
         s_area_codes = ""
         for s_area in JSON.parse(body).results.small_area
           s_area_codes += "," + s_area.code
@@ -26,9 +33,10 @@ module.exports = (robot) ->
           "genre": "G009,G010",
           "small_area": s_area_codes,
           "format": "json"
-        msg.http "http://webservice.recruit.co.jp/hotpepper/gourmet/v1/"
-          .query(gourmet_q)
-          .get() (err, res, body) ->
+        request
+          url: "http://webservice.recruit.co.jp/hotpepper/gourmet/v1/",
+          qs: gourmet_q,
+          (err, res, body) ->
             shops = JSON.parse(body).results.shop
             shop = msg.random shops
             text = "見つかりませんでした・・・"
