@@ -25,6 +25,7 @@
     "hubot": ">= 2.6.0 < 3.0.0",
     "hubot-animemap": "0.0.1",
     "hubot-cron": "^0.2.5",
+    "hubot-hatebu": "0.0.0",
     "hubot-scripts": ">= 2.5.0 < 3.0.0",
     "hubot-slack": "^2.2.0",
     "hubot-tabelog": "0.0.4",
