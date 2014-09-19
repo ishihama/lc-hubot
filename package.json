@@ -28,7 +28,8 @@
     "hubot-slack": "^2.2.0",
     "hubot-tabelog": "0.0.4",
     "hubot-todos": "0.0.5",
-    "request": "^2.42.0"
+    "request": "^2.42.0",
+    "hubot-suddendeath": "0.0.3"
   },
   "engines": {
     "node": ">= 0.8.x",
