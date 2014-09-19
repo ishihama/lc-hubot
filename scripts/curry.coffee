@@ -24,6 +24,7 @@ module.exports = (robot) ->
         url: "http://webservice.recruit.co.jp/hotpepper/small_area/v1/",
         qs: small_area_q,
         (err, res, body) ->
+          throw err if err
           console.log 'small_area query response: ' + body
           s_area_codes = ""
           for s_area in JSON.parse(body).results.small_area
@@ -41,6 +42,7 @@ module.exports = (robot) ->
             url: "http://webservice.recruit.co.jp/hotpepper/gourmet/v1/",
             qs: gourmet_q,
             (err, res, body) ->
+              throw err if err
               console.log 'gourmet query response: ' + body
               shops = JSON.parse(body).results.shop
               shop = msg.random shops
