@@ -19,8 +19,9 @@ module.exports = (robot) ->
     request options,  (error,  response,  body) ->
       to_json body,  (err,  data) =>
         text = "はてブ ホットエントリ\n"
-        for id,  item of data["rdf:RDF"].item
+        for id, item of data["rdf:RDF"].item
+          subject = item["dc:subject"]
           title = item.title
           link  = item.link
-          text += "#{title} #{link}\n"
+          text += "【#{subject}】 #{title[0..20]} #{link}\n"
         msg.send(text)
