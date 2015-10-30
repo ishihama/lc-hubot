@@ -12,16 +12,16 @@ request = require 'request'
 module.exports = (robot) ->
   robot.respond /backlog (.+)$/i, (msg) ->
     options =
-      url: "https://#{process.env.spaceId}.backlog.jp/api/v2/issues?apiKey=#{process.env.apiKey}"
+      url: "https://#{process.env.HUBOT_BACKLOG_SPACE_ID}.backlog.jp/api/v2/issues?apiKey=#{process.env.HUBOT_BACKLOG_API_KEY}"
       form:
-        projectId: process.env.projectId
+        projectId: process.env.HUBOT_BACKLOG_PROJECT_ID
         summary: msg.match[1]
         priorityId: 3
-        issueTypeId: process.env.issueTypeId
+        issueTypeId: process.env.HUBOT_BACKLOG_ISSUE_TYPE_ID
       timeout: 2000
       headers: {'user-agent': 'node fetcher'}
     request.post options,  (error,  response,  body) ->
-      text = "https://#{process.env.spaceId}.backlog.jp/view/"
+      text = "https://#{process.env.HUBOT_BACKLOG_SPACE_ID}.backlog.jp/view/"
       text += (JSON.parse(body)["issueKey"])
       msg.send("#{text} を登録しました")
 
