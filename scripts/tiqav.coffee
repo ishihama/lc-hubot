@@ -17,9 +17,9 @@ module.exports = (robot) ->
       headers: {'user-agent': 'node fetcher'}
     request options,  (error,  response,  body) ->
       index = Math.floor(Math.random() * JSON.parse(body).length)
-        text = "http://img.tiqav.com/"
-        text += (JSON.parse(body)[index]["id"])
-        text += "."
-        text += (JSON.parse(body)[index]["ext"])
-        msg.send("#{text}")
+      text = "http://img.tiqav.com/"
+      text += (JSON.parse(body)[index]["id"])
+      text += "."
+      text += (JSON.parse(body)[index]["ext"])
+      msg.send("#{text}")
 
