@@ -27,5 +27,4 @@ module.exports = (robot) ->
           lists.push nannohi
         elm = elm.next()
       nannohi = lists[Math.floor(Math.random() * lists.length)]
-      msg.send nannohi.title
-      msg.send "    " + nannohi.description
+      msg.send nannohi.title + "\n    " + nannohi.description
