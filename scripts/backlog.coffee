@@ -23,5 +23,5 @@ module.exports = (robot) ->
     request.post options,  (error,  response,  body) ->
       text = "https://#{process.env.HUBOT_BACKLOG_SPACE_ID}.backlog.jp/view/"
       text += (JSON.parse(body)["issueKey"])
-      msg.send("#{text} を登録しました")
+      msg.send("Subject:#{msg.match[1]}\nURL:#{text}")
 
