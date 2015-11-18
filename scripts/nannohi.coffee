@@ -14,7 +14,8 @@ module.exports = (robot) ->
   robot.respond /(なんの日|何の日)/i, (msg) ->
     date = new Date
     todayText = (date.getMonth()+1) + "月" + date.getDate() + "日"
-    request 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(todayText), (error, response, body) ->
+    url = 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(todayText)
+    request url, (error, response, body) ->
       $ = cheerio.load body
       elm = $("h2:has(span:contains('記念日・年中行事'))").next()
       lists = []
@@ -27,4 +28,4 @@ module.exports = (robot) ->
           lists.push nannohi
         elm = elm.next()
       nannohi = lists[Math.floor(Math.random() * lists.length)]
-      msg.send nannohi.title + "\n    " + nannohi.description
+      msg.send nannohi.title + (if nannohi.description then "\n    " + nannohi.description else "") + "\n    " + url
