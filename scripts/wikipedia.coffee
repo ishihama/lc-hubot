@@ -2,7 +2,7 @@
 #  wikipedia
 #
 # Commands:
-#   hubot wiki <query>
+#   hubot wikipedia <query>
 #
 # Notes:
 #
