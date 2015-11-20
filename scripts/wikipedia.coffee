@@ -12,7 +12,7 @@ request = require 'request'
 module.exports = (robot) ->
   robot.respond /wikipedia (.+)$/i, (msg) ->
     options =
-      url: "http://ja.wikipedia.org/w/api.php?action=query&format=json&titles=#{encodeURI(msg.match[1])}&prop=extracts&redirects=1&exchars=130&explaintext=1"
+      url: "http://ja.wikipedia.org/w/api.php?action=query&format=json&titles=#{encodeURI(msg.match[1])}&prop=extracts&redirects=1&exchars=1000&explaintext=1"
       timeout: 2000
       headers: {'user-agent': 'node fetcher'}
     request options,  (error,  response,  body) ->
