@@ -20,6 +20,7 @@ permitted = (room) ->
 module.exports = (robot) ->
   robot.respond /aipo$/i, (msg) ->
     room = msg.room?.trim().toLowerCase()
+    console.log(room)
     if !permitted room
       return
     client.fetch 'https://vps.lightcafe.co.jp/aipo/portal', {}, (error, $, response) ->
@@ -39,7 +40,9 @@ module.exports = (robot) ->
           
 
   robot.respond /aipo (\d+)$/i, (msg) ->
-    if !permitted msg
+    room = msg.room?.trim().toLowerCase()
+    console.log(room)
+    if !permitted room
       return
     client.fetch 'https://vps.lightcafe.co.jp/aipo/portal', {}, (error, $, response) ->
       loginInfo = {
