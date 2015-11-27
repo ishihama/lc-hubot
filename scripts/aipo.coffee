@@ -19,7 +19,7 @@ permitted = (room) ->
 
 module.exports = (robot) ->
   robot.respond /aipo$/i, (msg) ->
-    room = msg.room?.trim().toLowerCase()
+    room = msg.envelope.room?.trim().toLowerCase()
     console.log(room)
     if !permitted room
       return
@@ -40,7 +40,7 @@ module.exports = (robot) ->
           
 
   robot.respond /aipo (\d+)$/i, (msg) ->
-    room = msg.room?.trim().toLowerCase()
+    room = msg.envelope.room?.trim().toLowerCase()
     console.log(room)
     if !permitted room
       return
