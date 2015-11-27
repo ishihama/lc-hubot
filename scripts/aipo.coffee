@@ -9,11 +9,18 @@
 #
 
 request = require 'request'
-cheerio = require 'cheerio'
 client  = require 'cheerio-httpcli'
+
+permitted_rooms = process.env.HUBOT_PERMITTED_ROOMS?.split(',') || []
+# permitted_users = process.env.HUBOT_PERMITTED_USERS?.split(',') || []
+
+permitted = (msg) ->
+  msg.room?.trim().toLowerCase() in permitted_rooms
 
 module.exports = (robot) ->
   robot.respond /aipo$/i, (msg) ->
+    if !permitted msg
+      return
     client.fetch 'https://vps.lightcafe.co.jp/aipo/portal', {}, (error, $, response) ->
       loginInfo = {
         'username': process.env.AIPO_USER_ID,
@@ -31,6 +38,8 @@ module.exports = (robot) ->
           
 
   robot.respond /aipo (\d+)$/i, (msg) ->
+    if !permitted msg
+      return
     client.fetch 'https://vps.lightcafe.co.jp/aipo/portal', {}, (error, $, response) ->
       loginInfo = {
         'username': process.env.AIPO_USER_ID,
