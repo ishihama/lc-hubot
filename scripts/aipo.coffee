@@ -14,12 +14,13 @@ client  = require 'cheerio-httpcli'
 permitted_rooms = process.env.HUBOT_PERMITTED_ROOMS?.split(',') || []
 # permitted_users = process.env.HUBOT_PERMITTED_USERS?.split(',') || []
 
-permitted = (msg) ->
-  msg.room?.trim().toLowerCase() in permitted_rooms
+permitted = (room) ->
+  room in permitted_rooms
 
 module.exports = (robot) ->
   robot.respond /aipo$/i, (msg) ->
-    if !permitted msg
+    room = msg.room?.trim().toLowerCase()
+    if !permitted room
       return
     client.fetch 'https://vps.lightcafe.co.jp/aipo/portal', {}, (error, $, response) ->
       loginInfo = {
