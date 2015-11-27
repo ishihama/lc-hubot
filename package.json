@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "cheerio": "^0.17.0",
+    "cheerio-httpcli": "0.3.8",
     "cron": "^1.0.9",
     "hubot": ">= 2.6.0 < 3.0.0",
     "hubot-animemap": "0.0.1",
