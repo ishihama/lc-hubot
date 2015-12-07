@@ -3,4 +3,5 @@
 , "hubot-tabelog"
 , "hubot-todos"
 , "hubot-cron"
+, "hubot-google-images"
 ]
