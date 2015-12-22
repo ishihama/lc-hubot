@@ -20,3 +20,6 @@ module.exports = (robot) ->
 （＿フ彡             / ←>> @#{msg.message.user.name}
 ```
   """
+
+  robot.hear /:shibazo:/, (msg) ->
+    msg.send "呼んだ？"
