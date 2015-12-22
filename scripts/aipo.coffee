@@ -58,6 +58,6 @@ module.exports = (robot) ->
           contentelm.html(contentelm.html().replace(/<br>/g, "\n"))
           caption = captionelm.text().trim()
           content = contentelm.text().trim()
-          msg.send "#{caption}\n\n#{content}"
+          msg.send "> #{caption}\n\n```\n#{content}\n```"
           client.fetch "https://vps.lightcafe.co.jp/aipo/portal/media-type/html/user/#{process.env.AIPO_USER_ID}/page/default.psml?action=ALJLogoutUser", {}, (error, $, response) ->
 
