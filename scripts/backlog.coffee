@@ -10,7 +10,7 @@
 request = require 'request'
 
 module.exports = (robot) ->
-  robot.respond /backlog (.+)[\s\r\n]+(.+)[\s\r\n]+(.+)/i, (msg) ->
+  robot.respond /backlog (.+)\s+(.+)\s+(.+)/i, (msg) ->
     options =
       url: "https://#{process.env.HUBOT_BACKLOG_SPACE_ID}.backlog.jp/api/v2/issues?apiKey=#{process.env.HUBOT_BACKLOG_API_KEY}"
       form:
@@ -22,7 +22,9 @@ module.exports = (robot) ->
       timeout: 2000
       headers: {'user-agent': 'node fetcher'}
     request.post options,  (error,  response,  body) ->
+      console.log(error)
+      console.log(response)
       text = "https://#{process.env.HUBOT_BACKLOG_SPACE_ID}.backlog.jp/view/"
       text += (JSON.parse(body)["issueKey"])
-      msg.send("Subject:#{msg.match[1]}\nURL:#{text}")
+      msg.send("Subject:#{msg.match[2]}\nURL:#{text}")
 
