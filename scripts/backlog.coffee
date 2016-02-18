@@ -22,8 +22,6 @@ module.exports = (robot) ->
       timeout: 2000
       headers: {'user-agent': 'node fetcher'}
     request.post options,  (error,  response,  body) ->
-      console.log(error)
-      console.log(response)
       text = "https://#{process.env.HUBOT_BACKLOG_SPACE_ID}.backlog.jp/view/"
       text += (JSON.parse(body)["issueKey"])
       msg.send("Subject:#{msg.match[2]}\nURL:#{text}")
