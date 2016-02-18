@@ -10,7 +10,7 @@
 request = require 'request'
 
 module.exports = (robot) ->
-  robot.respond /backlog (.+) (.+) (.+)$/i, (msg) ->
+  robot.respond /backlog (.+)[\s\r\n](.+)[\s\r\n](.+)/i, (msg) ->
     options =
       url: "https://#{process.env.HUBOT_BACKLOG_SPACE_ID}.backlog.jp/api/v2/issues?apiKey=#{process.env.HUBOT_BACKLOG_API_KEY}"
       form:
