@@ -7,11 +7,20 @@
 # Notes:
 #
 
+cronJob = require('cron').CronJob
 request = require 'request'
 cheerio = require 'cheerio'
 
 module.exports = (robot) ->
-  robot.respond /movie/i,  (msg) ->
+  cronJob = new cronJob(
+    cronTime: "0 0 10 * * 1"
+    start: true
+    timezone: "Asia/Tokyo"
+    onTick: ->
+      get_movie_list()
+  )
+  get_movie_list = ->
+    text = ""
     options =
       url: 'http://feeds.eiga.com/eiga_comingsoon?format=xml'
       timeout: 2000
@@ -27,5 +36,5 @@ module.exports = (robot) ->
         url = item['children'][4]['children'][0]['data']
         text = text + "\n" + title + " / " + url
 
-      msg.send(text)
+      robot.send {room: "movie"}, text
 
