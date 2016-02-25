@@ -36,7 +36,7 @@ module.exports = (robot) ->
       msg.send("Subject:#{msg.match[2]}\nURL:#{text}")
       msg.send(robot.brain.get(keyPrefix + arg1 + keySuffixes[3]) ? [])
 
-  robot.respond /backlog-putenv (.+) (.+) (.+)/i, (msg) ->
+  robot.respond /backlog-putenv (.+?)\s+(.+?)\s+([\s\S]*)/i, (msg) ->
     arg1 = msg.match[1].toUpperCase()
     arg2 = msg.match[2].toUpperCase()
     arg3 = msg.match[3]
@@ -48,4 +48,3 @@ module.exports = (robot) ->
       key = keyPrefix + arg1 + "-" + keySuffix
       val = robot.brain.get(key) ? []
       msg.send(key + ":" + val)
-
