@@ -34,7 +34,7 @@ module.exports = (robot) ->
       text = "https://#{process.env.HUBOT_BACKLOG_SPACE_ID}.backlog.jp/view/"
       text += (JSON.parse(body)["issueKey"])
       text += "\n"
-      text += robot.brain.get(keyPrefix + arg1 + keySuffixes[3]) ? []
+      text += robot.brain.get(keyPrefix + arg1 + keySuffixes[3]) ? ""
       msg.send("Subject:#{msg.match[2]}\nURL:#{text}")
 
   robot.respond /backlog-putenv (.+?)\s+(.+?)\s+([\s\S]*)/i, (msg) ->
