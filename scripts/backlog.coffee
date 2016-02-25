@@ -33,8 +33,9 @@ module.exports = (robot) ->
     request.post options,  (error,  response,  body) ->
       text = "https://#{process.env.HUBOT_BACKLOG_SPACE_ID}.backlog.jp/view/"
       text += (JSON.parse(body)["issueKey"])
+      text += "\n"
+      text += robot.brain.get(keyPrefix + arg1 + keySuffixes[3]) ? []
       msg.send("Subject:#{msg.match[2]}\nURL:#{text}")
-      msg.send(robot.brain.get(keyPrefix + arg1 + keySuffixes[3]) ? [])
 
   robot.respond /backlog-putenv (.+?)\s+(.+?)\s+([\s\S]*)/i, (msg) ->
     arg1 = msg.match[1].toUpperCase()
