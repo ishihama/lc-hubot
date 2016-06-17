@@ -28,7 +28,7 @@ module.exports = (robot) ->
         projectId: robot.brain.get(keyPrefix + arg1 + "-" + keySuffixes[0])
         issueTypeId: robot.brain.get(keyPrefix + arg1 + "-" + keySuffixes[1])
         categoryId: [robot.brain.get(keyPrefix + arg1 + "-" + keySuffixes[2])] ? []
-      timeout: 2000
+      timeout: 10000
       headers: {'user-agent': 'node fetcher'}
     request.post options,  (error,  response,  body) ->
       text = "https://#{process.env.HUBOT_BACKLOG_SPACE_ID}.backlog.jp/view/"
