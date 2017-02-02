@@ -15,6 +15,7 @@ DENDOU_KANOJO   = 'https://docs.google.com/spreadsheets/d/1uXHdgQjCaEyN2eIX-GNRZ
 ENGINEER_KANOJO = 'https://docs.google.com/spreadsheets/d/1uXHdgQjCaEyN2eIX-GNRZ_qAo298yXk1tGueTkY5qsQ/pub?gid=974414959&single=true&output=tsv'
 NET_KANOJO      = 'https://docs.google.com/spreadsheets/d/1uXHdgQjCaEyN2eIX-GNRZ_qAo298yXk1tGueTkY5qsQ/pub?gid=1678189143&single=true&output=tsv'
 DENDOU_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFpry4gw0x05uglzrlcUIzl1dNnPLS8aYrC66EoO-VthisG4w/exec'
+OSANPO_CAMERA   = 'https://docs.google.com/spreadsheets/d/1uXHdgQjCaEyN2eIX-GNRZ_qAo298yXk1tGueTkY5qsQ/pub?gid=1518768300&single=true&output=tsv'
 
 module.exports = (robot) ->
   cronJob = new cronJob(
@@ -73,6 +74,12 @@ module.exports = (robot) ->
 
   robot.respond /lets_it_kanojo/i, (msg) ->
     get_kanojos ENGINEER_KANOJO, (kanojos) ->
+      rnd = Math.floor(Math.random() * (Object.keys(kanojos).length))
+      kanojo = Object.keys(kanojos)[rnd];
+      msg.send(kanojo)
+
+  robot.respond /lets_bijo/i, (msg) ->
+    get_kanojos OSANPO_CAMERA, (kanojos) ->
       rnd = Math.floor(Math.random() * (Object.keys(kanojos).length))
       kanojo = Object.keys(kanojos)[rnd];
       msg.send(kanojo)
