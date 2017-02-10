@@ -20,13 +20,13 @@ module.exports = (robot) ->
   robot.respond /(random|抽選|選ぶ)(.*)$/i, (msg) ->
     url = 'https://slack.com/api/channels.list?token=' + process.env.HUBOT_SLACK_TOKEN
     request url, (err, res, body) ->
-      main msg, JSON.parse(body).channels
+      main msg, JSON.parse(body).channels, robot
     url = 'https://slack.com/api/groups.list?token=' + process.env.HUBOT_SLACK_TOKEN
     request url, (err, res, body) ->
-      main msg, JSON.parse(body).groups
+      main msg, JSON.parse(body).groups, robot
 
 
-main = (msg, list) ->
+main = (msg, list, robot) ->
   channel = (c for c in list when c.name == msg.message.room)
 #  channel = (c for c in list when c.name == 'lets_today_nomu')
 
