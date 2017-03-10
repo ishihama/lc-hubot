@@ -43,4 +43,4 @@ module.exports = (robot) ->
         output = output + "\n" + line_str
 
       output = output + "```"
-      robot.send {room: "anime"}, output
+      msg.send output
