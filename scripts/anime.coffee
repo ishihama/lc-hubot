@@ -26,7 +26,7 @@ module.exports = (robot) ->
       body_re = body_re.replace(/<\/td><td align=\"center\">|<td align=\"center\">|<\/td><\/tr>|<\/td><td>/g, '|')
       body_re = body_re.replace(/<br \/>|<\/a>/g,'')
 
-      output = "```"
+      output = ""
       for line in body_re.split('<tr>')
         # タイトル除去
         line_str = line.replace(/<th>(.*)/g, '')
@@ -42,5 +42,4 @@ module.exports = (robot) ->
         # 出力用文字列
         output = output + "\n" + line_str
 
-      output = output + "```"
-      msg.send output
+      msg.send "> ```\n#{output}\n```"
