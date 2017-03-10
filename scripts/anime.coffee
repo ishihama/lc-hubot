@@ -42,4 +42,4 @@ module.exports = (robot) ->
         # 出力用文字列
         output = output + "\n" + line_str
 
-      msg.send "> ```\n#{output}\n```"
+      msg.send "```\n#{output}\n```"
