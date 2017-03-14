@@ -7,7 +7,7 @@ buffer = require "buffer"
 
 module.exports = (robot) ->
   cronJob = new cronJob(
-    cronTime: "0 * * * * *"
+    cronTime: "0 0 10 * * 1"
     start: true
     timezone: "Asia/Tokyo"
     onTick: ->
