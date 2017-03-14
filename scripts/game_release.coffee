@@ -47,6 +47,7 @@ module.exports = (robot) ->
       robot.send("とりあえず3月の分しか対応してませんヽ(=´▽`=)ﾉ")
 
   cron_game_release_titles = ->
+  #robot.respond /gametest (.+)$/i, (msg) ->
     now = new Date();
     request_month = dateformat(now, 'yyyymm')
     request_url = "http://kakaku.com/game/release/Date=" + request_month + "/"
@@ -67,7 +68,7 @@ module.exports = (robot) ->
           target_date = $('.weekly, .sat, .sun', this).text()
 
         if ($('.gameTitle a', this).length)
-          all_release_titles.push(target_date + ":" + $('.gameTitle a', this).text())
+          all_release_titles.push(target_date + ": " + $('.gameTitle a', this).text() + " (" + $('.gamePrice', this).text() + ")")
 
       search_dates = []
       for i in [0..6]
@@ -80,5 +81,5 @@ module.exports = (robot) ->
           if (release_title.match(search_date))
             output_titles.push(release_title)
 
-      robot.send {room: "hubot"}, "```\n" + output_titles.join("\n") + "\n```"
-
+      #msg.send ("```\n" + output_titles.join("\n") + "\n```")
+      robot.send {room: "game"}, "```\n" + output_titles.join("\n") + "\n```"
