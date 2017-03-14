@@ -24,6 +24,7 @@
     "cheerio": "^0.17.0",
     "cheerio-httpcli": "0.3.8",
     "cron": "^1.0.9",
+    "dateformat": "^2.0.0",
     "hubot": "^2.17.0",
     "hubot-animemap": "0.0.1",
     "hubot-cron": "^0.2.5",
