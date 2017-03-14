@@ -80,5 +80,5 @@ module.exports = (robot) ->
           if (release_title.match(search_date))
             output_titles.push(release_title)
 
-      robot.send ("```\n" + output_titles.join("\n") + "\n```")
+      robot.send {room: "hubot"}, "```\n" + output_titles.join("\n") + "\n```"
 
