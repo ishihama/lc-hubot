@@ -4,7 +4,6 @@ cheerio = require 'cheerio'
 dateformat = require 'dateformat'
 iconv = require "iconv"
 buffer = require "buffer"
-DAYS = ["日","月","火","水","木","金","土"]
 
 module.exports = (robot) ->
   cronJob = new cronJob(
