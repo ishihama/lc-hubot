@@ -38,13 +38,8 @@ module.exports = (robot) ->
       msg.send "エリア指定も出来るよ shibazo lunch [ yaesu | shibuya | ginza]"
 
     rec_lunch = ""
-    access_flg = false
-    i = 0
     rec_lunch_w = ""
-    ramdam_su1 = Math.floor(Math.random() * 100) + 1
-    # ramdam_su2 = Math.floor(Math.random() * 100) + 1
-    # ramdam_su3 = Math.floor(Math.random() * 100) + 1
-    # arr = [ramdam_su1, ramdam_su2, ramdam_su3]
+    ramdam_su1 = Math.floor(Math.random() * 50) + 1
     ramdam_su = ramdam_su1
     # for ramdam_su in arr
     new Bluebird (resolve) ->
@@ -53,22 +48,21 @@ module.exports = (robot) ->
       console.log ramdam_su
       rec_url_w = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=f83e9b6f731b0871&small_area=#{area_cd}&lunch=1&budget=B001&start=#{ramdam_su}&count=1&format=json"
 
-      request url: rec_url_w, (err, res, body) ->
-        throw err if err
+      request rec_url_w, (err, res, body) ->
         # if res.statusCode is 200
         article = (JSON.parse(body)['results']['shop'])
         for id of article
           text = (JSON.parse(body)['results']['shop'][id]['id'])
           rec_lunch_w = "https://www.hotpepper.jp/str#{text}/lunch/"
-        setTimeout ->
 
-          request rec_lunch_w, (err2, res2, body2) ->
-            console.log "rec_lunch_w: #{rec_lunch_w}"
-            setTimeout ->
-            # if res2.statusCode is 200
-              console.log "今日のオススメランチはここだよ〜！\n#{rec_lunch_w}"
-            # msg.send "今日のオススメランチはここだよ〜！\n#{rec_lunch_w}"
-            , 2000
-
-
-    msg.send "end"
+        console.log err
+        if err == null
+          setTimeout ->
+            request rec_lunch_w, (err2, res2, body2) ->
+              if err2 == null
+                setTimeout ->
+                  if rec_lunch_w.length > 0
+                	   msg.send "今日のオススメランチはここだよ〜！\n#{rec_lunch_w}"
+                  else
+                    msg.send "もう一回アクセスしてね"
+                , 2000

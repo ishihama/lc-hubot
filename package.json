@@ -37,7 +37,9 @@
     "iconv": "^2.2.1",
     "request": "^2.42.0",
     "xml2js": "0.2.8",
-    "xmljson": "0.2.0"
+    "xmljson": "0.2.0",
+    "q": "1.4.1",
+    "bluebird": "3.5.0"
   },
   "engines": {
     "node": ">= 0.8.x",
