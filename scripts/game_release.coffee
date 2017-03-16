@@ -1,9 +1,43 @@
+# Description:
+#  ゲームのリリース情報を表示
+# 
+# Commands:
+#  hubot game {query}
+#
+# Notes:
+#  
+
 cronJob = require('cron').CronJob
-request = require 'request'
-cheerio = require 'cheerio'
+cheerio = require 'cheerio-httpcli'
 dateformat = require 'dateformat'
-iconv = require "iconv"
-buffer = require "buffer"
+
+
+add_date = (date, num) ->
+  date.setDate(date.getDate() + num)
+  return date
+
+
+fetch_site = (request_month, callback) ->
+  request_url = "http://kakaku.com/game/release/Date=" + request_month + "/"
+  options =
+    encoding: "SJIS"
+    timeout: 5000
+    headers: {'user-agent': 'node fetcher'}
+  cheerio.fetch request_url, options, (error, $, response) ->
+    all_release_titles = []
+    current_date = undefined
+    $("#titleSche tr").each () ->
+      if ($(".weekly, .sat, .sun", this).length)
+        current_date = $(".weekly, .sat, .sun", this).text()
+      if ($(".gameTitle a", this).length)
+        all_release_titles.push({
+          release_date: current_date.replace(/（.*）/, ''),
+          release_date_full: current_date,
+          title: $(".gameTitle a", this).text(),
+          price: $(".gamePrice", this).text()
+        })
+    callback(all_release_titles)
+
 
 module.exports = (robot) ->
   cronJob = new cronJob(
@@ -17,69 +51,22 @@ module.exports = (robot) ->
   robot.respond /game (.+)$/i, (msg) ->
     now = new Date()
     request_month = dateformat(now, 'yyyymm')
-    request_url = "http://kakaku.com/game/release/Date=" + request_month + "/"
-    options =
-      url: request_url
-      encoding:"binary"
-      timeout: 5000
-      headers: {'user-agent': 'node fetcher'}
-    request options,  (error,  response,  body) ->
-      request_title = msg.match[1]
-      conv = new iconv.Iconv('SJIS', 'UTF-8//TRANSLIT//IGNORE')
-      body = new Buffer(body, 'binary')
-      body = conv.convert(body).toString()
-      $ = cheerio.load body
-      release_day = ""
-      flag = 0
-      $("#titleSche tr").each () ->
-        if ($('.weekly', this).length)
-          release_day = $('.weekly', this).text()
+    request_title = msg.match[1]
 
-        title = $('.gameTitle a', this).text()
-        if (title.match(request_title))
-          flag = 1
-          msg.send(title + "  の発売日は " + release_day)
-
-      if (!flag)
+    fetch_site request_month, (all_release_titles) ->
+      matched = (t for t in all_release_titles when t.title.match(request_title))
+      if !matched
         msg.send("また発売はだいぶ先みたいっす")
+      for title in matched
+        msg.send("#{title.title} の発売日は #{title.release_date_full}")
 
-      msg.send("とりあえず3月の分しか対応してませんヽ(=´▽`=)ﾉ")
-      robot.send("とりあえず3月の分しか対応してませんヽ(=´▽`=)ﾉ")
 
   cron_game_release_titles = ->
-  #robot.respond /gametest (.+)$/i, (msg) ->
     now = new Date();
     request_month = dateformat(now, 'yyyymm')
-    request_url = "http://kakaku.com/game/release/Date=" + request_month + "/"
-    options =
-      url: request_url
-      encoding:"binary"
-      timeout: 5000
-      headers: {'user-agent': 'node fetcher'}
-    request options,  (error,  response,  body) ->
-      conv = new iconv.Iconv('SJIS', 'UTF-8//TRANSLIT//IGNORE')
-      body = new Buffer(body, 'binary')
-      body = conv.convert(body).toString()
-      $ = cheerio.load body
-      all_release_titles = []
-      target_date = ""
-      $("#titleSche tr").each () ->
-        if ($('.weekly, .sat, .sun', this).length)
-          target_date = $('.weekly, .sat, .sun', this).text()
+    fetch_site request_month, (all_release_titles) ->
+      target_dates = (dateformat(add_date(new Date(), i), 'yyyy年m月d日') for i in [0..6])
 
-        if ($('.gameTitle a', this).length)
-          all_release_titles.push(target_date + ": " + $('.gameTitle a', this).text() + " (" + $('.gamePrice', this).text() + ")")
+      output_titles = ("#{title.release_date_full}: #{title.title} (#{title.price})" for title in all_release_titles when title.release_date in target_dates)
 
-      search_dates = []
-      for i in [0..6]
-        search_dates.push(dateformat(now, 'yyyy年m月d日'))
-        now.setDate(now.getDate() + 1)
-
-      output_titles = []
-      for i, search_date of search_dates
-        for i, release_title of all_release_titles
-          if (release_title.match(search_date))
-            output_titles.push(release_title)
-
-      #msg.send ("```\n" + output_titles.join("\n") + "\n```")
       robot.send {room: "game"}, "```\n" + output_titles.join("\n") + "\n```"
