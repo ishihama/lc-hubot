@@ -1,8 +1,9 @@
 # Description:
 #  random
 #
-# Connamds:
+# Commands:
 #   hubot random
+#   hubot random <phrases>
 #
 # Notes:
 #
