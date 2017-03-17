@@ -3,6 +3,8 @@
 #
 # Commands:
 #   hubot lunch
+#   hubot lunch yaesu
+#   hubot lunch list
 #
 # Notes:
 #
@@ -12,62 +14,81 @@ cheerio = require 'cheerio'
 client  = require 'cheerio-httpcli'
 Bluebird = require 'bluebird'
 
-lunch_key = process.env.LUNCH_KEY
-
 module.exports = (robot) ->
-  robot.respond /lunch(.*)$/i, (msg) ->
+  robot.respond /lunch list$/i, (msg) ->
+    msg.send "八重洲 ->yaesu"
+    msg.send "銀座 -> ginza"
+    msg.send "有楽町 -> yurakucho"
+    msg.send "日本橋 -> nihonbashi"
+    msg.send "丸の内 -> marunouchi"
+    msg.send "渋谷 -> shibuya"
+    msg.send "原宿 -> harajuku"
+    msg.send "博多 -> hakata"
+    msg.send "天神 -> tenjin"
+    msg.send "福岡 -> fukuoka"
+    msg.send "沖縄 -> okinawa"
+
+  robot.respond /lunch(.*)/i, (msg) ->
+
     # エリア指定
     area_text = msg.match[1].split(' ')[1]
     if area_text != undefined
       area_size = area_text.length
       switch (area_text)
         when '八重洲', 'yaesu', 'tokyo'
-          area_cd = 'X040'
+          area_cd = 'PRE13/ARE15/SUB1501/'
+          area = '八重洲'
         when '銀座', 'ginza'
-          area_cd = 'Y005'
+          area_cd = 'PRE13/ARE2/SUB201/'
+          area = '銀座'
+        when '有楽町', 'yurakucho'
+          area_cd = 'PRE13/ARE2/SUB202/'
+          area = '有楽町'
         when '日本橋', 'nihonbashi', 'nihonbasi'
-          area_cd = 'X035'
+          area_cd = 'PRE13/ARE15/SUB1503/'
+          area = '日本橋'
+        when '丸の内', 'marunouchi'
+          area_cd = 'PRE13/ARE15/SUB1504/'
+          area = '丸の内'
         when '渋谷', 'shibuya', 'sibuya'
-          area_cd = 'XA0T'
+          area_cd = 'PRE13/ARE8/'
+          area = '渋谷'
         when '原宿', 'harajuku'
-          area_cd = 'X100'
+          area_cd = 'PRE13/ARE23/SUB2301/'
+          area = '原宿'
+        when '博多', 'hakata'
+          area_cd = 'PRE40/ARE126/'
+          area = '博多'
+        when '天神', 'tenjin'
+          area_cd = 'PRE40/ARE122/'
+          area = '天神'
+        when '福岡', 'fukuoka', 'hukuoka'
+          area_cd = 'PRE40/ARE126/'
+          area = '福岡'
+        when '沖縄', 'okinawa'
+          area_cd = 'PRE47/ARE144/SUB14402/'
+          area = '沖縄'
+        when 'list'
+          return false
         else
           msg.send "登録されてないエリアです"
           return false
     else
-      area_cd = 'X040'
-      msg.send "エリア指定も出来るよ shibazo lunch [ yaesu | shibuya | harajuku]"
+      area_cd = 'PRE13/ARE15/'
+      area = '東京駅'
+      msg.send "東京駅近辺で出してみたよ。エリア指定してみてね！\nshibazo lunch [ yaesu | shibuya | tenjin]\nリスト一覧 : shibazo lunch list"
 
-    rec_lunch_w = ""
+    rec_url_w = "https://retty.me/area/#{area_cd}PUR1/"
 
-    new Bluebird (resolve) ->
-      resolve area_cd
-    .then (area_cd) =>
-      randam_su = Math.floor(Math.random() * 30) + 1
-      rec_url_w = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=#{lunch_key}&small_area=#{area_cd}&lunch=1&budget=B001&start=1&count=100&format=json"
+    if rec_url_w.length > 0
+      request rec_url_w, (err, res, body) ->
+        setTimeout ->
+          if err == null
+            body_re = /var restaurantIds\=(.*)/.exec(body)
+            body_re = body_re[0].replace(/var restaurantIds=\[/g,'')
+            body_re = body_re.replace(/\]\;getEbisuReservationBtnByMultipleValues(.*)/g, '')
+            selected_shop = msg.random body_re.split(',')
+            rec_url = "https://retty.me/area/#{area_cd}#{selected_shop}/"
 
-      if rec_url_w.length > 0
-        request rec_url_w, (err, res, body) ->
-
-          article = (JSON.parse(body)['results']['shop'])
-
-          lunch_list = []
-          for id of article
-            text = (JSON.parse(body)['results']['shop'][id]['id'])
-            lunch_list.push("https://www.hotpepper.jp/str#{text}/lunch/")
-          rec_url = msg.random lunch_list
-          setTimeout ->
-            if err == null
-              request rec_url, (err2, res2, body2) ->
-                if err2 == null
-                  setTimeout ->
-                    if rec_url.length > 0
-                  	   msg.send "今日のオススメランチはここだよ〜！\n#{rec_url}"
-                    else
-                      msg.send "データが存在しないよ。もう一回コマンド打って〜！"
-                  , 1500
-                else
-                  msg.send "データが存在しないよ。もう一回コマンド打って〜！"
-            else
-              msg.send "データが存在しないよ。もう一回コマンド打って〜！"
-          , 800
+            msg.send "#{area}のおすすめランチはここだよ〜！\n#{rec_url}"
+        , 1000
