@@ -35,34 +35,35 @@ module.exports = (robot) ->
           return false
     else
       area_cd = 'X040'
-      msg.send "エリア指定も出来るよ shibazo lunch [ yaesu | shibuya | ginza]"
+      msg.send "エリア指定も出来るよ shibazo lunch [ yaesu | shibuya | harajuku]"
 
     rec_lunch = ""
     rec_lunch_w = ""
-    ramdam_su1 = Math.floor(Math.random() * 50) + 1
-    ramdam_su = ramdam_su1
-    # for ramdam_su in arr
+
     new Bluebird (resolve) ->
-      resolve ramdam_su
-    .then (ramdam_su) =>
-      console.log ramdam_su
-      rec_url_w = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=f83e9b6f731b0871&small_area=#{area_cd}&lunch=1&budget=B001&start=#{ramdam_su}&count=1&format=json"
+      resolve area_cd
+    .then (area_cd) =>
+      randam_su = Math.floor(Math.random() * 30) + 1
+      randam_su2 = Math.floor(Math.random() * 30) + 1
+      rec_url_w = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=f83e9b6f731b0871&small_area=#{area_cd}&lunch=1&budget=B001&start=#{randam_su}&count=1&format=json"
 
       request rec_url_w, (err, res, body) ->
-        # if res.statusCode is 200
         article = (JSON.parse(body)['results']['shop'])
         for id of article
           text = (JSON.parse(body)['results']['shop'][id]['id'])
           rec_lunch_w = "https://www.hotpepper.jp/str#{text}/lunch/"
-
-        console.log err
-        if err == null
-          setTimeout ->
+        setTimeout ->
+          if err == null
             request rec_lunch_w, (err2, res2, body2) ->
               if err2 == null
                 setTimeout ->
                   if rec_lunch_w.length > 0
                 	   msg.send "今日のオススメランチはここだよ〜！\n#{rec_lunch_w}"
                   else
-                    msg.send "もう一回アクセスしてね"
-                , 2000
+                    msg.send "データが存在しないよ。もう一回コマンド打って〜！"
+                , 1500
+              else
+                msg.send "データが存在しないよ。もう一回コマンド打って〜！"
+          else
+            msg.send "データが存在しないよ。もう一回コマンド打って〜！"
+        , 800
