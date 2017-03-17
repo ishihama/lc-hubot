@@ -1,3 +1,13 @@
+# Description:
+#   おすすめランチをランダムで1件表示
+#
+# Commands:
+#   hubot lunch
+#   hubot lunch yaesu
+#   hubot lunch list
+#
+# Notes:
+#
 
 request = require 'request'
 cheerio = require 'cheerio'
