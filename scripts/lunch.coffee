@@ -44,25 +44,30 @@ module.exports = (robot) ->
       resolve area_cd
     .then (area_cd) =>
       randam_su = Math.floor(Math.random() * 30) + 1
-      rec_url_w = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=#{lunch_key}&small_area=#{area_cd}&lunch=1&budget=B001&start=#{randam_su}&count=1&format=json"
+      rec_url_w = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=#{lunch_key}&small_area=#{area_cd}&lunch=1&budget=B001&start=1&count=100&format=json"
 
-      request rec_url_w, (err, res, body) ->
-        article = (JSON.parse(body)['results']['shop'])
-        for id of article
-          text = (JSON.parse(body)['results']['shop'][id]['id'])
-          rec_lunch_w = "https://www.hotpepper.jp/str#{text}/lunch/"
-        setTimeout ->
-          if err == null
-            request rec_lunch_w, (err2, res2, body2) ->
-              if err2 == null
-                setTimeout ->
-                  if rec_lunch_w.length > 0
-                	   msg.send "今日のオススメランチはここだよ〜！\n#{rec_lunch_w}"
-                  else
-                    msg.send "データが存在しないよ。もう一回コマンド打って〜！"
-                , 1500
-              else
-                msg.send "データが存在しないよ。もう一回コマンド打って〜！"
-          else
-            msg.send "データが存在しないよ。もう一回コマンド打って〜！"
-        , 800
+      if rec_url_w.length > 0
+        request rec_url_w, (err, res, body) ->
+
+          article = (JSON.parse(body)['results']['shop'])
+
+          lunch_list = []
+          for id of article
+            text = (JSON.parse(body)['results']['shop'][id]['id'])
+            lunch_list.push("https://www.hotpepper.jp/str#{text}/lunch/")
+          rec_url = msg.random lunch_list
+          setTimeout ->
+            if err == null
+              request rec_url, (err2, res2, body2) ->
+                if err2 == null
+                  setTimeout ->
+                    if rec_url.length > 0
+                  	   msg.send "今日のオススメランチはここだよ〜！\n#{rec_url}"
+                    else
+                      msg.send "データが存在しないよ。もう一回コマンド打って〜！"
+                  , 1500
+                else
+                  msg.send "データが存在しないよ。もう一回コマンド打って〜！"
+            else
+              msg.send "データが存在しないよ。もう一回コマンド打って〜！"
+          , 800
