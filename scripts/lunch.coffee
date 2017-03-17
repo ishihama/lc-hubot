@@ -10,8 +10,9 @@
 request = require 'request'
 cheerio = require 'cheerio'
 client  = require 'cheerio-httpcli'
-Q = require('q')
 Bluebird = require 'bluebird'
+
+lunch_key = process.env.LUNCH_KEY
 
 module.exports = (robot) ->
   robot.respond /lunch(.*)$/i, (msg) ->
@@ -37,15 +38,13 @@ module.exports = (robot) ->
       area_cd = 'X040'
       msg.send "エリア指定も出来るよ shibazo lunch [ yaesu | shibuya | harajuku]"
 
-    rec_lunch = ""
     rec_lunch_w = ""
 
     new Bluebird (resolve) ->
       resolve area_cd
     .then (area_cd) =>
       randam_su = Math.floor(Math.random() * 30) + 1
-      randam_su2 = Math.floor(Math.random() * 30) + 1
-      rec_url_w = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=f83e9b6f731b0871&small_area=#{area_cd}&lunch=1&budget=B001&start=#{randam_su}&count=1&format=json"
+      rec_url_w = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=#{lunch_key}&small_area=#{area_cd}&lunch=1&budget=B001&start=#{randam_su}&count=1&format=json"
 
       request rec_url_w, (err, res, body) ->
         article = (JSON.parse(body)['results']['shop'])
