@@ -22,36 +22,18 @@ module.exports = (robot) ->
       dt = new Date
       year = dt.getFullYear()
       month = dt.getMonth() + 1
-      if month < 10
-        month = '0' + month
       switch (month)
-        when '01'
+        when '1'
           year = dt.getFullYear() - 1
           month = '11'
-        when '02'
+        when '2', '3', '4'
           month = '03'
-        when '03'
-          month = '03'
-        when '04'
-          month = '03'
-        when '05'
+        when '5', '6', '7'
           month = '07'
-        when '06'
-          month = '07'
-        when '07'
-          month = '07'
-        when '08'
+        when '8', '9', '10'
           month = '09'
-        when '09'
-          month = '09'
-        when '10'
-          month = '09'
-        when '11'
+        when '11', '12'
           month = '11'
-        when '12'
-          month = '11'
-        else
-          msg.send '不正な値が取得されたよ'
 
       dd_str = "/(.*)s#{year}#{month}/g"
       #console.log body_re.replace(/\(.*)s\"#{year}#{month}\"/g, '')
@@ -66,10 +48,7 @@ module.exports = (robot) ->
 
       output = ""
       i = 0
-      for line in body_re.split('<tr>')
-        if ++i > 30
-          break
-
+      for line in body_re.split('<tr>')[0..30]
         # タイトル除去
         line_str = line.replace(/<\/h2>(.*)>/g, '')
         line_str = line_str.replace(/<th (.*)<\/tr>/g, '')
