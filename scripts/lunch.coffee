@@ -17,7 +17,8 @@ Bluebird = require 'bluebird'
 class Hoge
 
   help_list: ->
-    rtn_str = "八重洲 -> shibazo lunch yaesu "
+    rtn_str = "実装されてるエリアだよ〜"
+    rtn_str = rtn_str + "\n" + "八重洲 -> shibazo lunch yaesu"
     rtn_str = rtn_str + "\n" + "銀座 -> shibazo lunch ginza"
     rtn_str = rtn_str + "\n" + "有楽町 -> shibazo lunch yurakucho"
     rtn_str = rtn_str + "\n" + "日本橋 -> shibazo lunch nihonbashi"
@@ -28,6 +29,9 @@ class Hoge
     rtn_str = rtn_str + "\n" + "天神 -> shibazo lunch tenjin"
     rtn_str = rtn_str + "\n" + "福岡 -> shibazo lunch fukuoka"
     rtn_str = rtn_str + "\n" + "沖縄 -> shibazo lunch okinawa"
+    rtn_str = rtn_str + "\n" + ""
+    rtn_str = rtn_str + "\n" + "後ろに食べたいジャンルを入れたら、エリア近辺の料理を表示するよ"
+    rtn_str = rtn_str + "\n" + "shibazo lunch yaesu 寿司"
 
     return rtn_str
 
@@ -250,8 +254,6 @@ module.exports = (robot) ->
           when '沖縄', 'okinawa'
             area_cd = 'PRE47/ARE144/SUB14402/'
             area = '沖縄'
-          when 'list'
-            return false
           else
             msg.send "登録されてないエリアです"
             return false
