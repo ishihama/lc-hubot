@@ -318,6 +318,9 @@ module.exports = (robot) ->
         rec_url_w = "https://retty.me/API/OUT/slcRestaurantBySearchConditionForWeb/?p=%2C%2C%2Call%2C%2C%2C%2C%2C%2C#{area_text}#{genre }%2C0%2C11%2C%2C"
         request rec_url_w, (err, res, body) ->
           results = JSON.parse(body).results
+          if results.length == 0
+            msg.send "残念ながら条件に一致するお店は見つけられませんでした。。"
+            return
           result = msg.random results
           rec_url = result.restaurant_url
           msg.send "おすすめはこちら！\n#{rec_url}"
