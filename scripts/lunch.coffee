@@ -215,6 +215,8 @@ class Conf
         rtn = 'LCAT25/CAT495/'
       when 'ベジタリアン', 'ベジタブル', '野菜料理'
         rtn = 'LCAT99/CAT907/'
+      when '酒', '安い酒'
+        rtn = 'LCAT1/CAT103/'
       else
         rtn = ''
 
@@ -317,7 +319,7 @@ module.exports = (robot) ->
         msg.send "東京駅近辺で出してみたよ。エリア指定してみてね！\nshibazo lunch [ yaesu | shibuya | tenjin]\nリスト一覧 : shibazo lunch list"
 
       if area_cd && area
-        rec_url_w = "https://retty.me/area/#{area_cd}#{genre_cd}#{stan_cd}PUR1/"
+        rec_url_w = "https://retty.me/area/#{area_cd}#{stan_cd}#{genre_cd}PUR1/"
       else
         if genre
           genre = "+" + encodeURI(genre)
@@ -338,12 +340,15 @@ module.exports = (robot) ->
           setTimeout ->
             if err == null
               body_re = /var restaurantIds\=(.*)/.exec(body)
-              body_re = body_re[0].replace(/var restaurantIds=\[/g,'')
-              body_re = body_re.replace(/\]\;getEbisuReservationBtnByMultipleValues(.*)/g, '')
-              selected_shop = msg.random body_re.split(',')
-              rec_url = "https://retty.me/area/#{area_cd}#{selected_shop}/"
+              if body_re == null
+                msg.send "残念ながら条件に一致するお店は見つけられませんでした。。"
+              else
+                body_re = body_re[0].replace(/var restaurantIds=\[/g,'')
+                body_re = body_re.replace(/\]\;getEbisuReservationBtnByMultipleValues(.*)/g, '')
+                selected_shop = msg.random body_re.split(',')
+                rec_url = "https://retty.me/area/#{area_cd}#{selected_shop}/"
 
-              msg.send "#{area}のおすすめ#{genre}ランチはここだよ〜！\n#{rec_url}"
+                msg.send "#{area}のおすすめ#{genre}ランチはここだよ〜！\n#{rec_url}"
           , 1000
     else
       conf = new Conf()
