@@ -5,6 +5,7 @@
 #   hubot lunch
 #   hubot lunch yaesu
 #   hubot lunch list
+#   hubot lunch yaesu 寿司
 #
 # Notes:
 #
@@ -14,7 +15,7 @@ cheerio = require 'cheerio'
 client  = require 'cheerio-httpcli'
 Bluebird = require 'bluebird'
 
-class Hoge
+class Conf
 
   help_list: ->
     rtn_str = "実装されてるエリアだよ〜"
@@ -29,6 +30,8 @@ class Hoge
     rtn_str = rtn_str + "\n" + "天神 -> shibazo lunch tenjin"
     rtn_str = rtn_str + "\n" + "福岡 -> shibazo lunch fukuoka"
     rtn_str = rtn_str + "\n" + "沖縄 -> shibazo lunch okinawa"
+    rtn_str = rtn_str + "\n" + "沖縄空港 -> shibazo lunch okinawaKuko"
+    rtn_str = rtn_str + "\n" + "おもろまち -> shibazo lunch omoromachi"
     rtn_str = rtn_str + "\n" + ""
     rtn_str = rtn_str + "\n" + "後ろに食べたいジャンルを入れたら、エリア近辺の料理を表示するよ"
     rtn_str = rtn_str + "\n" + "shibazo lunch yaesu 寿司"
@@ -141,10 +144,22 @@ class Hoge
         rtn = 'LCAT7/CAT301/'
       when '中華', '中華料理'
         rtn = 'LCAT14/'
+      when '広東', '広東料理'
+        rtn = 'LCAT14/CAT122/'
+      when '上海', '上海料理', '上海蟹'
+        rtn = 'LCAT14/CAT124/'
       when '四川', '四川料理'
         rtn = 'LCAT14/CAT121/'
       when '北京', '北京料理'
         rtn = 'LCAT14/CAT123/'
+      when '台湾', '台湾料理'
+        rtn = 'LCAT14/CAT125/'
+      when '飲茶', '点心'
+        rtn = 'LCAT14/CAT128/'
+      when 'チャーハン', '炒飯'
+        rtn = 'LCAT14/CAT126/'
+      when '餃子'
+        rtn = 'LCAT14/CAT260/'
       when 'イタリアン', 'イタリア', 'イタリア料理'
         rtn = 'LCAT6/'
       when '洋食', '西洋', '洋食料理', '西洋料理'
@@ -205,14 +220,17 @@ module.exports = (robot) ->
   robot.respond /lunch(.*)/i, (msg) ->
     arg = msg.match[1].split(' ')
     if arg[1] == 'list'
-      hoge = new Hoge()
-      msg.send hoge.help_list()
+      conf = new Conf()
+      msg.send conf.help_list()
     else if arg.length == 2 || arg.length == 3
       # ジャンル指定
       if arg.length == 3
-        hoge = new Hoge()
+        conf = new Conf()
         genre = arg[2]
-        genre_cd = hoge.genle_search genre
+        genre_cd = conf.genle_search genre
+        if genre_cd.length == 0
+          genre = ''
+          msg.send "ジャンル名が存在しないよ。他の単語で検索してみてね。"
       else
         genre = ''
         genre_cd = ''
@@ -253,7 +271,13 @@ module.exports = (robot) ->
             area = '福岡'
           when '沖縄', 'okinawa'
             area_cd = 'PRE47/ARE144/SUB14402/'
-            area = '沖縄'
+            area = '沖縄(国際通り)'
+          when '沖縄空港', 'okinawaKuko'
+            area_cd = 'PRE47/ARE144/SUB14404/'
+            area = '沖縄空港近辺'
+          when 'おもろまち', 'omoromachi'
+            area_cd = 'PRE47/ARE144/SUB14403/'
+            area = 'おもろまち近辺'
           else
             msg.send "登録されてないエリアです"
             return false
@@ -277,5 +301,5 @@ module.exports = (robot) ->
               msg.send "#{area}のおすすめ#{genre}ランチはここだよ〜！\n#{rec_url}"
           , 1000
     else
-      hoge = new Hoge()
-      msg.send hoge.help_list()
+      conf = new Conf()
+      msg.send conf.help_list()
