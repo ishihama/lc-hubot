@@ -228,6 +228,9 @@ module.exports = (robot) ->
         conf = new Conf()
         genre = arg[2]
         genre_cd = conf.genle_search genre
+        if genre_cd.length == 0
+          genre = ''
+          msg.send "ジャンル名が存在しないよ。他の単語で検索してみてね。"
       else
         genre = ''
         genre_cd = ''
