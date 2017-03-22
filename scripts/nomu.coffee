@@ -1,5 +1,5 @@
 # Description:
-#   おすすめランチをランダムで1件表示
+#   おすすめディナーをランダムで1件表示
 #
 # Commands:
 #   hubot lunch
@@ -25,12 +25,14 @@ class Conf
     rtn_str = rtn_str + "\n" + "日本橋 -> shibazo lunch nihonbashi"
     rtn_str = rtn_str + "\n" + "丸の内 -> shibazo lunch marunouchi"
     rtn_str = rtn_str + "\n" + "秋葉原 -> shibazo lunch akb"
+    rtn_str = rtn_str + "\n" + "神田 -> shibazo lunch kanda"
     rtn_str = rtn_str + "\n" + "新宿 -> shibazo lunch shinjuku"
     rtn_str = rtn_str + "\n" + "渋谷 -> shibazo lunch shibuya"
     rtn_str = rtn_str + "\n" + "原宿 -> shibazo lunch harajuku"
     rtn_str = rtn_str + "\n" + "荻窪 -> shibazo lunch ogikubo"
     rtn_str = rtn_str + "\n" + "高円寺 -> shibazo lunch koenji"
     rtn_str = rtn_str + "\n" + "六町 -> shibazo lunch rokucho"
+    rtn_str = rtn_str + "\n" + "市川 -> shibazo lunch ichikawa"
     rtn_str = rtn_str + "\n" + "博多 -> shibazo lunch hakata"
     rtn_str = rtn_str + "\n" + "天神 -> shibazo lunch tenjin"
     rtn_str = rtn_str + "\n" + "福岡 -> shibazo lunch fukuoka"
@@ -222,7 +224,7 @@ class Conf
 
 module.exports = (robot) ->
   # メイン処理
-  robot.respond /lunch(.*)/i, (msg) ->
+  robot.respond /nomu(.*)/i, (msg) ->
     arg = msg.match[1].split(' ')
     if arg[1] == 'list'
       conf = new Conf()
@@ -312,11 +314,11 @@ module.exports = (robot) ->
             msg.send "登録されてないエリアです"
             return false
       else
-        area_cd = 'PRE13/ARE15/'
-        area = '東京駅'
-        msg.send "東京駅近辺で出してみたよ。エリア指定してみてね！\nshibazo lunch [ yaesu | shibuya | tenjin]\nリスト一覧 : shibazo lunch list"
+        area_cd = 'PRE13/ARE11/SUB1101/'
+        area = '神田駅'
+        msg.send "神田駅近辺で出してみたよ。エリア指定してみてね！\nshibazo lunch [ yaesu | shibuya | tenjin]\nリスト一覧 : shibazo lunch list"
 
-      rec_url_w = "https://retty.me/area/#{area_cd}#{genre_cd}#{stan_cd}PUR1/"
+      rec_url_w = "https://retty.me/area/#{area_cd}#{genre_cd}#{stan_cd}PUR8/"
 
       if rec_url_w.length > 0
         request rec_url_w, (err, res, body) ->
@@ -328,7 +330,7 @@ module.exports = (robot) ->
               selected_shop = msg.random body_re.split(',')
               rec_url = "https://retty.me/area/#{area_cd}#{selected_shop}/"
 
-              msg.send "#{area}のおすすめ#{genre}ランチはここだよ〜！\n#{rec_url}"
+              msg.send "#{area}のおすすめ#{genre}飲み屋はここだよ〜！\n#{rec_url}"
           , 1000
     else
       conf = new Conf()
