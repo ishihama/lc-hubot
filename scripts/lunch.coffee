@@ -24,8 +24,13 @@ class Conf
     rtn_str = rtn_str + "\n" + "有楽町 -> shibazo lunch yurakucho"
     rtn_str = rtn_str + "\n" + "日本橋 -> shibazo lunch nihonbashi"
     rtn_str = rtn_str + "\n" + "丸の内 -> shibazo lunch marunouchi"
+    rtn_str = rtn_str + "\n" + "秋葉原 -> shibazo lunch akb"
+    rtn_str = rtn_str + "\n" + "新宿 -> shibazo lunch shinjuku"
     rtn_str = rtn_str + "\n" + "渋谷 -> shibazo lunch shibuya"
     rtn_str = rtn_str + "\n" + "原宿 -> shibazo lunch harajuku"
+    rtn_str = rtn_str + "\n" + "荻窪 -> shibazo lunch ogikubo"
+    rtn_str = rtn_str + "\n" + "高円寺 -> shibazo lunch koenji"
+    rtn_str = rtn_str + "\n" + "六町 -> shibazo lunch rokucho"
     rtn_str = rtn_str + "\n" + "博多 -> shibazo lunch hakata"
     rtn_str = rtn_str + "\n" + "天神 -> shibazo lunch tenjin"
     rtn_str = rtn_str + "\n" + "福岡 -> shibazo lunch fukuoka"
@@ -234,6 +239,7 @@ module.exports = (robot) ->
       else
         genre = ''
         genre_cd = ''
+      stan_cd = ''
 
       # エリア指定
       area_text = arg[1]
@@ -254,12 +260,29 @@ module.exports = (robot) ->
           when '丸の内', 'marunouchi'
             area_cd = 'PRE13/ARE15/SUB1504/'
             area = '丸の内'
+          when '秋葉原', 'アキバ', 'akb'
+            area_cd = 'PRE13/ARE11/SUB1102/'
+            area = 'アキバ'
+          when '新宿', 'shinjuku'
+            area_cd = 'PRE13/ARE1/'
+            area = '新宿'
           when '渋谷', 'shibuya', 'sibuya'
             area_cd = 'PRE13/ARE8/'
             area = '渋谷'
           when '原宿', 'harajuku'
             area_cd = 'PRE13/ARE23/SUB2301/'
             area = '原宿'
+          when '六町', 'rokucho'
+            area_cd = 'PRE13/ARE21/SUB2102/'
+            area = '綾瀬(で我慢して)'
+          when '高円寺', 'koenji'
+            stan_cd = 'STAN1624/'
+            area_cd = 'PRE12/ARE12/SUB1204/'
+            area = '高円寺'
+          when '荻窪', 'ogikubo'
+            stan_cd = 'STAN1622/'
+            area_cd = 'PRE12/ARE12/SUB1204/'
+            area = '荻窪'
           when '博多', 'hakata'
             area_cd = 'PRE40/ARE126/'
             area = '博多'
@@ -286,7 +309,7 @@ module.exports = (robot) ->
         area = '東京駅'
         msg.send "東京駅近辺で出してみたよ。エリア指定してみてね！\nshibazo lunch [ yaesu | shibuya | tenjin]\nリスト一覧 : shibazo lunch list"
 
-      rec_url_w = "https://retty.me/area/#{area_cd}#{genre_cd}PUR1/"
+      rec_url_w = "https://retty.me/area/#{area_cd}#{genre_cd}#{stan_cd}PUR1/"
 
       if rec_url_w.length > 0
         request rec_url_w, (err, res, body) ->
