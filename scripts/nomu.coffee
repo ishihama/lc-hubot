@@ -217,6 +217,8 @@ class Conf
         rtn = 'LCAT25/CAT495/'
       when 'ベジタリアン', 'ベジタブル', '野菜料理'
         rtn = 'LCAT99/CAT907/'
+      when '酒', '安い酒'
+        rtn = 'LCAT1/CAT103/'
       else
         rtn = ''
 
@@ -318,19 +320,37 @@ module.exports = (robot) ->
         area = '神田駅'
         msg.send "神田駅近辺で出してみたよ。エリア指定してみてね！\nshibazo lunch [ yaesu | shibuya | tenjin]\nリスト一覧 : shibazo lunch list"
 
-      rec_url_w = "https://retty.me/area/#{area_cd}#{genre_cd}#{stan_cd}PUR8/"
+      if area_cd && area
+        rec_url_w = "https://retty.me/area/#{area_cd}#{stan_cd}#{genre_cd}PUR8/"
+      else
+        if genre
+          genre = "+" + encodeURI(genre)
+        area_text = encodeURI(area_text)
+        rec_url_w = "https://retty.me/API/OUT/slcRestaurantBySearchConditionForWeb/?p=%2C%2C%2Call%2C%2C%2C%2C%2C%2C#{area_text}#{genre }%2C0%2C11%2C%2C"
+        request rec_url_w, (err, res, body) ->
+          results = JSON.parse(body).results
+          if results.length == 0
+            msg.send "残念ながら条件に一致するお店は見つけられませんでした。。"
+            return
+          result = msg.random results
+          rec_url = result.restaurant_url
+          msg.send "おすすめはこちら！\n#{rec_url}"
+        return
 
       if rec_url_w.length > 0
         request rec_url_w, (err, res, body) ->
           setTimeout ->
             if err == null
               body_re = /var restaurantIds\=(.*)/.exec(body)
-              body_re = body_re[0].replace(/var restaurantIds=\[/g,'')
-              body_re = body_re.replace(/\]\;getEbisuReservationBtnByMultipleValues(.*)/g, '')
-              selected_shop = msg.random body_re.split(',')
-              rec_url = "https://retty.me/area/#{area_cd}#{selected_shop}/"
+              if body_re == null
+                msg.send "残念ながら条件に一致するお店は見つけられませんでした。。"
+              else
+                body_re = body_re[0].replace(/var restaurantIds=\[/g,'')
+                body_re = body_re.replace(/\]\;getEbisuReservationBtnByMultipleValues(.*)/g, '')
+                selected_shop = msg.random body_re.split(',')
+                rec_url = "https://retty.me/area/#{area_cd}#{selected_shop}/"
 
-              msg.send "#{area}のおすすめ#{genre}飲み屋はここだよ〜！\n#{rec_url}"
+                msg.send "#{area}のおすすめ#{genre}飲み屋はここだよ〜！\n#{rec_url}"
           , 1000
     else
       conf = new Conf()
