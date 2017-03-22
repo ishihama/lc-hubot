@@ -224,6 +224,7 @@ module.exports = (robot) ->
   # メイン処理
   robot.respond /lunch(.*)/i, (msg) ->
     arg = msg.match[1].split(' ')
+    console.log(arg)
     if arg[1] == 'list'
       conf = new Conf()
       msg.send conf.help_list()
@@ -234,7 +235,6 @@ module.exports = (robot) ->
         genre = arg[2]
         genre_cd = conf.genle_search genre
         if genre_cd.length == 0
-          genre = ''
           msg.send "ジャンル名が存在しないよ。他の単語で検索してみてね。"
       else
         genre = ''
@@ -302,14 +302,28 @@ module.exports = (robot) ->
             area_cd = 'PRE47/ARE144/SUB14403/'
             area = 'おもろまち近辺'
           else
-            msg.send "登録されてないエリアです"
-            return false
+            msg.send "登録されてないエリアなのでフリーワードで検索します！"
+            area_cd = ''
+            area = ''
       else
         area_cd = 'PRE13/ARE15/'
         area = '東京駅'
         msg.send "東京駅近辺で出してみたよ。エリア指定してみてね！\nshibazo lunch [ yaesu | shibuya | tenjin]\nリスト一覧 : shibazo lunch list"
 
-      rec_url_w = "https://retty.me/area/#{area_cd}#{genre_cd}#{stan_cd}PUR1/"
+      if area_cd && area
+        rec_url_w = "https://retty.me/area/#{area_cd}#{genre_cd}#{stan_cd}PUR1/"
+      else
+        if genre
+          genre = "+" + encodeURI(genre)
+        area_text = encodeURI(area_text)
+        rec_url_w = "https://retty.me/API/OUT/slcRestaurantBySearchConditionForWeb/?p=%2C%2C%2Call%2C%2C%2C%2C%2C%2C#{area_text}#{genre }%2C0%2C11%2C%2C"
+        console.log(rec_url_w)
+        request rec_url_w, (err, res, body) ->
+          results = JSON.parse(body).results
+          result = msg.random results
+          rec_url = result.restaurant_url
+          msg.send "おすすめはこちら！\n#{rec_url}"
+        return
 
       if rec_url_w.length > 0
         request rec_url_w, (err, res, body) ->
