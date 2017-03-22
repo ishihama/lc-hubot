@@ -224,7 +224,6 @@ module.exports = (robot) ->
   # メイン処理
   robot.respond /lunch(.*)/i, (msg) ->
     arg = msg.match[1].split(' ')
-    console.log(arg)
     if arg[1] == 'list'
       conf = new Conf()
       msg.send conf.help_list()
@@ -317,7 +316,6 @@ module.exports = (robot) ->
           genre = "+" + encodeURI(genre)
         area_text = encodeURI(area_text)
         rec_url_w = "https://retty.me/API/OUT/slcRestaurantBySearchConditionForWeb/?p=%2C%2C%2Call%2C%2C%2C%2C%2C%2C#{area_text}#{genre }%2C0%2C11%2C%2C"
-        console.log(rec_url_w)
         request rec_url_w, (err, res, body) ->
           results = JSON.parse(body).results
           result = msg.random results
