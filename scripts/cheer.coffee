@@ -13,12 +13,11 @@ NEKKETSU_OUEN = 'https://docs.google.com/spreadsheets/d/14FUQMxDSwJxujfjAZNpPbhh
 
 module.exports = (robot) ->
   robot.respond /(応援｜疲れた)(.*)$/i, (msg) ->
-    get_ouen NEKKETSU_OUEN, (messages) ->
-      rnd = Math.floor(Math.random() * (Object.keys(kanojos).length))
-      ouen = Object.keys(messages)[rnd];
-      msg.send(ouen)
+    get_cheer_messages NEKKETSU_OUEN, (messages) ->
+      cheer = msg.random(messages);
+      msg.send(cheer)
 
-get_ouen = (url, callback) ->
+get_cheer_messages = (url, callback) ->
   client.fetch url, {}, (error, $, response, body) ->
     messages = []
     for line, i in body.split('\n')
