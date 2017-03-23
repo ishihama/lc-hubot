@@ -12,7 +12,7 @@ client  = require 'cheerio-httpcli'
 NEKKETSU_OUEN = 'https://docs.google.com/spreadsheets/d/14FUQMxDSwJxujfjAZNpPbhhQroegMcPUitbGb88R2pU/export?format=tsv'
 
 module.exports = (robot) ->
-  robot.respond /(応援｜疲れた)(.*)$/i, (msg) ->
+  robot.respond /(応援|疲れた)(.*)$/i, (msg) ->
     get_cheer_messages NEKKETSU_OUEN, (messages) ->
       cheer = msg.random(messages);
       msg.send(cheer)
