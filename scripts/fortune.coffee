@@ -55,6 +55,6 @@ module.exports = (robot) ->
           request_url2 = url
           cheerio.fetch request_url2, options, (error, $, response) ->
             result = $("#page_body p").text()
-            msg.send (result)
+            msg.send ("```" + result + "```")
             return false
 
