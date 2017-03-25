@@ -105,10 +105,6 @@ module.exports = (robot) ->
                       if text_w.split(',')[1] != undefined
                         stan_cd = text_w.split(',')[1]
                       area = area_text
-                  else
-                    area_cd = 'PRE13/'
-                    area = '東京'
-                    msg.send "東京でオススメを出してみたよ。エリア指定してみてね！\nshibazo lunch [ yaesu | shibuya | tenjin]\nリスト一覧 : shibazo lunch list"
 
                   if area_cd && area
                     rec_url_w = "https://retty.me/area/#{area_cd}#{stan_cd}#{genre_cd}"
