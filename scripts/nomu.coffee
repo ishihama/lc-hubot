@@ -2,10 +2,10 @@
 #   おすすめディナーをランダムで1件表示
 #
 # Commands:
-#   hubot lunch
-#   hubot lunch yaesu
-#   hubot lunch list
-#   hubot lunch yaesu 寿司
+#   hubot nomu
+#   hubot nomu yaesu
+#   hubot nomu list
+#   hubot nomu yaesu 寿司
 #
 # Notes:
 #
@@ -19,29 +19,29 @@ class Conf
 
   help_list: ->
     rtn_str = "実装されてるエリアだよ〜"
-    rtn_str = rtn_str + "\n" + "八重洲 -> shibazo lunch yaesu"
-    rtn_str = rtn_str + "\n" + "銀座 -> shibazo lunch ginza"
-    rtn_str = rtn_str + "\n" + "有楽町 -> shibazo lunch yurakucho"
-    rtn_str = rtn_str + "\n" + "日本橋 -> shibazo lunch nihonbashi"
-    rtn_str = rtn_str + "\n" + "丸の内 -> shibazo lunch marunouchi"
-    rtn_str = rtn_str + "\n" + "秋葉原 -> shibazo lunch akb"
-    rtn_str = rtn_str + "\n" + "神田 -> shibazo lunch kanda"
-    rtn_str = rtn_str + "\n" + "新宿 -> shibazo lunch shinjuku"
-    rtn_str = rtn_str + "\n" + "渋谷 -> shibazo lunch shibuya"
-    rtn_str = rtn_str + "\n" + "原宿 -> shibazo lunch harajuku"
-    rtn_str = rtn_str + "\n" + "荻窪 -> shibazo lunch ogikubo"
-    rtn_str = rtn_str + "\n" + "高円寺 -> shibazo lunch koenji"
-    rtn_str = rtn_str + "\n" + "六町 -> shibazo lunch rokucho"
-    rtn_str = rtn_str + "\n" + "市川 -> shibazo lunch ichikawa"
-    rtn_str = rtn_str + "\n" + "博多 -> shibazo lunch hakata"
-    rtn_str = rtn_str + "\n" + "天神 -> shibazo lunch tenjin"
-    rtn_str = rtn_str + "\n" + "福岡 -> shibazo lunch fukuoka"
-    rtn_str = rtn_str + "\n" + "沖縄 -> shibazo lunch okinawa"
-    rtn_str = rtn_str + "\n" + "沖縄空港 -> shibazo lunch okinawaKuko"
-    rtn_str = rtn_str + "\n" + "おもろまち -> shibazo lunch omoromachi"
+    rtn_str = rtn_str + "\n" + "八重洲 -> shibazo nomu yaesu"
+    rtn_str = rtn_str + "\n" + "銀座 -> shibazo nomu ginza"
+    rtn_str = rtn_str + "\n" + "有楽町 -> shibazo nomu yurakucho"
+    rtn_str = rtn_str + "\n" + "日本橋 -> shibazo nomu nihonbashi"
+    rtn_str = rtn_str + "\n" + "丸の内 -> shibazo nomu marunouchi"
+    rtn_str = rtn_str + "\n" + "秋葉原 -> shibazo nomu akb"
+    rtn_str = rtn_str + "\n" + "神田 -> shibazo nomu kanda"
+    rtn_str = rtn_str + "\n" + "新宿 -> shibazo nomu shinjuku"
+    rtn_str = rtn_str + "\n" + "渋谷 -> shibazo nomu shibuya"
+    rtn_str = rtn_str + "\n" + "原宿 -> shibazo nomu harajuku"
+    rtn_str = rtn_str + "\n" + "荻窪 -> shibazo nomu ogikubo"
+    rtn_str = rtn_str + "\n" + "高円寺 -> shibazo nomu koenji"
+    rtn_str = rtn_str + "\n" + "六町 -> shibazo nomu rokucho"
+    rtn_str = rtn_str + "\n" + "市川 -> shibazo nomu ichikawa"
+    rtn_str = rtn_str + "\n" + "博多 -> shibazo nomu hakata"
+    rtn_str = rtn_str + "\n" + "天神 -> shibazo nomu tenjin"
+    rtn_str = rtn_str + "\n" + "福岡 -> shibazo nomu fukuoka"
+    rtn_str = rtn_str + "\n" + "沖縄 -> shibazo nomu okinawa"
+    rtn_str = rtn_str + "\n" + "沖縄空港 -> shibazo nomu okinawaKuko"
+    rtn_str = rtn_str + "\n" + "おもろまち -> shibazo nomu omoromachi"
     rtn_str = rtn_str + "\n" + ""
     rtn_str = rtn_str + "\n" + "後ろに食べたいジャンルを入れたら、エリア近辺の料理を表示するよ"
-    rtn_str = rtn_str + "\n" + "shibazo lunch yaesu 寿司"
+    rtn_str = rtn_str + "\n" + "shibazo nomu yaesu 寿司"
 
     return rtn_str
 
@@ -318,7 +318,7 @@ module.exports = (robot) ->
       else
         area_cd = 'PRE13/ARE11/SUB1101/'
         area = '神田駅'
-        msg.send "神田駅近辺で出してみたよ。エリア指定してみてね！\nshibazo lunch [ yaesu | shibuya | tenjin]\nリスト一覧 : shibazo lunch list"
+        msg.send "神田駅近辺で出してみたよ。エリア指定してみてね！\nshibazo nomu [ yaesu | shibuya | tenjin]\nリスト一覧 : shibazo nomu list"
 
       if area_cd && area
         rec_url_w = "https://retty.me/area/#{area_cd}#{stan_cd}#{genre_cd}PUR8/"
