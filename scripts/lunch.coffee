@@ -97,13 +97,14 @@ module.exports = (robot) ->
                       area_text = area_merge_list[area_text_w]
                     if area_text.length == 0
                       area_text = area_text_w
-                      msg.send "area_text: " + area_text
 
-                      # エリアマスタ読み込み
-                      if (area_text of area_list)
-                        area_cd = area_list[area_text].split('\t')[0]
-                        stan_cd = area_list[area_text].split('\t')[1]
-                        area = area_text
+                    # エリアマスタ読み込み
+                    if (area_text of area_list)
+                      text_w = area_list[area_text].split('\t')[0]
+                      area_cd = text_w.split(',')[0]
+                      if text_w.split(',')[1] != undefined
+                        stan_cd = text_w.split(',')[1]
+                      area = area_text
                   else
                     area_cd = 'PRE13/'
                     area = '東京'
@@ -111,6 +112,7 @@ module.exports = (robot) ->
 
                   if area_cd && area
                     rec_url_w = "https://retty.me/area/#{area_cd}#{stan_cd}#{genre_cd}"
+                    # ランチ絞り込み
                     #rec_url_w = "https://retty.me/area/#{area_cd}#{stan_cd}#{genre_cd}PUR1/"
                   else
                     if genre
@@ -140,11 +142,10 @@ module.exports = (robot) ->
                             selected_shop = msg.random body_re.split(',')
                             rec_url = "https://retty.me/area/#{area_cd}#{selected_shop}/"
 
-                            msg.send "#{area}のおすすめ#{genre}ランチはここだよ〜！\n#{rec_url}"
+                            msg.send "#{area}のおすすめ#{genre}はここだよ〜！\n#{rec_url}"
                       , 1000
                 else
-                  conf = new Conf()
                   msg.send conf.help_list()
-              , 500
-          , 1000
-      , 1500
+              , 100
+          , 100
+      , 100
