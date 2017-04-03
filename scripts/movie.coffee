@@ -19,6 +19,10 @@ module.exports = (robot) ->
     onTick: ->
       get_movie_list()
   )
+
+  robot.respond /movie$/i, (msg) ->
+    get_movie_list()
+
   get_movie_list = ->
     text = ""
     options =
