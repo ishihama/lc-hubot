@@ -22,7 +22,7 @@ FORCE_ENTER_MESSAGES = [
 module.exports = (robot) ->
   robot.leave (msg) ->
     member_id = msg.message.user.id
-    room_id = msg.message.user.room
+    room_id = msg.message.channel.id
     msg.send(room_id)
     if room_id == "C4TUT57K2"
       # 一応、botのidには動作しないようにしておく
