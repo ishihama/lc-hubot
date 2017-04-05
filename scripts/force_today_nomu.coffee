@@ -19,14 +19,13 @@ FORCE_ENTER_MESSAGES = [
   "ごめんね、ここからは出られないんだ。",
 ]
 
-ROOM_ID = "C4TUT57K2"
-ROOM_NAME = "test_leave"
+ROOM_ID = "C0DBB44QP"
+ROOM_NAME = "レッツトゥデイ飲む"
 
 module.exports = (robot) ->
   robot.leave (msg) ->
     member_id = msg.message.user.id
     room_name = msg.message.user.room
-    msg.send(room_name)
     if room_name == ROOM_NAME
       # 一応、botのidには動作しないようにしておく
       if (member_id != robot.adapter.self.id)
