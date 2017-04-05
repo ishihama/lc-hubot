@@ -19,16 +19,19 @@ FORCE_ENTER_MESSAGES = [
   "ごめんね、ここからは出られないんだ。",
 ]
 
+ROOM_ID = "C4TUT57K2"
+ROOM_NAME = "test_leave"
+
 module.exports = (robot) ->
   robot.leave (msg) ->
     member_id = msg.message.user.id
-    room_id = msg.channel.id
-    msg.send(room_id)
-    if room_id == "C4TUT57K2"
+    room_name = msg.message.user.room
+    msg.send(room_name)
+    if room_name == ROOM_NAME
       # 一応、botのidには動作しないようにしておく
       if (member_id != robot.adapter.self.id)
         msg.send(msg.random(LEAVE_MESSAGES).replace("{member_id}", member_id))
-        url = "https://slack.com/api/channels.invite?token=#{process.env.HUBOT_SLACK_FORCE_NOMU_TOKEN}&channel=#{room_id}&user=#{member_id}"
+        url = "https://slack.com/api/channels.invite?token=#{process.env.HUBOT_SLACK_FORCE_NOMU_TOKEN}&channel=#{ROOM_ID}&user=#{member_id}"
         request url, (err, res, body) ->
           msg.send(body)
           msg.send(msg.random(FORCE_ENTER_MESSAGES))
