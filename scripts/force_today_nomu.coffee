@@ -23,6 +23,7 @@ module.exports = (robot) ->
   robot.leave (msg) ->
     member_id = msg.message.user.id
     room_id = msg.message.user.room
+    msg.send(room_id)
     if room_id == "C4TUT57K2"
       # 一応、botのidには動作しないようにしておく
       if (member_id != robot.adapter.self.id)
