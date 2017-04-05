@@ -24,8 +24,9 @@ module.exports = (robot) ->
       member_id = msg.message.user.id
       # 一応、botのidには動作しないようにしておく
       if (member_id != robot.adapter.self.id)
-        msg.send(msg.random(LEAVE_MESSAGES).replace("{member}", member_id))
+        msg.send(msg.random(LEAVE_MESSAGES).replace("{member_id}", member_id))
         url = "https://slack.com/api/channels.invite?token=#{process.env.HUBOT_SLACK_TOKEN}&channel=C4TUT57K2&user=#{member_id}"
         request url, (err, res, body) ->
+          msg.send(body)
           msg.send(msg.random(FORCE_ENTER_MESSAGES))
 
