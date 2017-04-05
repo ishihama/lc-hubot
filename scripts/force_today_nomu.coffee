@@ -32,6 +32,5 @@ module.exports = (robot) ->
         msg.send(msg.random(LEAVE_MESSAGES).replace("{member_id}", member_id))
         url = "https://slack.com/api/channels.invite?token=#{process.env.HUBOT_SLACK_FORCE_NOMU_TOKEN}&channel=#{ROOM_ID}&user=#{member_id}"
         request url, (err, res, body) ->
-          msg.send(body)
           msg.send(msg.random(FORCE_ENTER_MESSAGES))
 
