@@ -28,7 +28,6 @@ module.exports = (robot) ->
     get_anime_list url, (animelist) ->
       msg.send "```#{today}のアニメ情報\n#{animelist}\n```"
 
-
   robot.respond /today_anime(.*)/i, (msg) ->
     arg = msg.match[1].split(' ')
     intFlg = 0
@@ -50,6 +49,7 @@ module.exports = (robot) ->
       msg.send "```#{today}のアニメ情報\n#{animelist}\n```"
 
   get_anime_list = (url, callback) ->
+    process.env.HTTP_PROXY = process.env.HUBOT_JP_HTTP_PROXY
     client.fetch url, {'user-agent': 'node fetcher'}, (error, $ ,response, body) ->
       $ = cheerio.load body
       if body.match(/情報はありません/)
@@ -65,6 +65,7 @@ module.exports = (robot) ->
         body_re = body_re.replace(/<img src=\"\/img\/i_hl_move\.png\" width=\"12\" height=\"12\" alt=\"時間変更\" class=\"expr_icon\">/g, '')
         body_re = body_re.replace(/<img src=\"\/img\/i_hl_sp\.png\" width=\"12\" height=\"12\" alt=\"特番\" class=\"expr_icon\">/g, '')
         body_re = body_re.replace(/<img src=\"\/img\/iepg\.png" width=\"25\" height=\"11\" alt=\"iEPG 録画予約\" class=\"iepg_icon\">/g, '')
+        body_re = body_re.replace(/<img src=\"\/img\/i_hl_rest\.png" width=\"12\" height=\"12\" alt=\"休止\" class=\"expr_icon\">/g, '')
         body_re = body_re.replace(/<\/a> <span class=\"notice\">/g, '')
         body_re = body_re.replace(/<\/td><td class=\"title\"><a href=\"\/tokyo\/info\/[0-9]+\">/g, '\/')
         body_re = body_re.replace(/<\/a> <a href=\"\/common\/iepg\.tvpi\?(.*)<\/a><\/td><\/tr>/g, 'br')
@@ -79,6 +80,11 @@ module.exports = (robot) ->
         body_re = body_re.replace(/<div class=\"container_content\">(.*)/g,'')
         body_re = body_re.replace(/<\/table><\/div><\/div>/g, '')
         body_re = body_re.replace(/<span class=\"warning\">(.*)<\/span>/g, '')
+        body_re = body_re.replace(/<\/tr>|<\/td>/g, '')
+        body_re = body_re.replace(/<tr>|<td>/g, '')
+        body_re = body_re.replace(/<span class=\"gray\">/g, '')
+        body_re = body_re.replace(/<\/span>/g, '')
+        body_re = body_re.replace(/&lt;|&gt;/g, '')
         body_re = body_re.replace(/br/g, '\n')
         body_re = body_re.replace(/リピート[0-9]\/[0-9]/g, 'リピート放送')
 
