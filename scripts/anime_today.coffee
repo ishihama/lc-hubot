@@ -61,7 +61,8 @@ module.exports = (robot) ->
           callback(animeList)
 
   get_anime_list = (url, callback) ->
-    # process.env.HTTP_PROXY = process.env.HUBOT_JP_HTTP_PROXY
+    original_proxy = process.env.HTTP_PROXY
+    process.env.HTTP_PROXY = process.env.HUBOT_JP_HTTP_PROXY
     client.fetch url, {'user-agent': 'node fetcher'}, (error, $ ,response, body) ->
       $ = cheerio.load body
 
@@ -124,5 +125,9 @@ module.exports = (robot) ->
 
       # インデント処理
       body_re = body_re.replace(/\//g, ' \/ ')
+      if (original_proxy)
+        process.env.HTTP_PROXY = original_proxy
+      else
+        delete process.env['HTTP_PROXY']
 
       callback(body_re)
