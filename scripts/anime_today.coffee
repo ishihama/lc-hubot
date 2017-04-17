@@ -61,7 +61,7 @@ module.exports = (robot) ->
           callback(animeList)
 
   get_anime_list = (url, callback) ->
-    process.env.HTTP_PROXY = process.env.HUBOT_JP_HTTP_PROXY
+    # process.env.HTTP_PROXY = process.env.HUBOT_JP_HTTP_PROXY
     client.fetch url, {'user-agent': 'node fetcher'}, (error, $ ,response, body) ->
       $ = cheerio.load body
 
