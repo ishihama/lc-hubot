@@ -64,11 +64,6 @@ module.exports = (robot) ->
     original_proxy = process.env.HTTP_PROXY
     process.env.HTTP_PROXY = process.env.HUBOT_JP_HTTP_PROXY
     client.fetch url, {'user-agent': 'node fetcher'}, (error, $ ,response, body) ->
-      # proxy戻し
-      if (original_proxy)
-        process.env.HTTP_PROXY = original_proxy
-      else
-        delete process.env['HTTP_PROXY']
       $ = cheerio.load body
 
       # 今日のアニメ欄整形
@@ -132,3 +127,8 @@ module.exports = (robot) ->
       body_re = body_re.replace(/\//g, ' \/ ')
 
       callback(body_re)
+    # proxy戻し
+    if (original_proxy)
+      process.env.HTTP_PROXY = original_proxy
+    else
+      delete process.env['HTTP_PROXY']
