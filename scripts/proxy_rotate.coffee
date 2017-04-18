@@ -2,9 +2,7 @@
 #   rotate proxy.
 #
 # Commands:
-#   hubot lets_today_kanojo
-#   hubot lets_random_kanojo
-#   hubot lets_konohi_kanojo 2012.10.04
+#   hubot proxy_rotate {query: like jp, us....}
 #
 
 client  = require 'cheerio-httpcli'
