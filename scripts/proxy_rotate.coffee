@@ -9,10 +9,11 @@ client  = require 'cheerio-httpcli'
 
 
 module.exports = (robot) ->
-  robot.respond /proxy_rotate( +([a-zA-Z]{2}))$/i, (msg) ->
+  robot.respond /proxy_rotate( +([a-zA-Z]{2})( [0-9]+)?)$/i, (msg) ->
     url = 'http://www.cybersyndrome.net/search.cgi'
     q = msg.match[2].toUpperCase()
-    client.fetch url, {'q': msg.match[2]}, (error, $, response, body) ->
+    addr_num = msg.match[3]
+    client.fetch url, {'q': q}, (error, $, response, body) ->
       m = body.match(/^var as.*$/m)
 
       if !m
@@ -36,7 +37,10 @@ module.exports = (robot) ->
 
       if addrs.length > 0
         env_key = "HUBOT_#{q}_HTTP_PROXY"
-        process.env[env_key] = addrs[0]
-        msg.send "proxy [#{env_key}] updated to [#{addrs[0]}]."
+        pos = 0
+        if addr_num
+          pos = parseInt(addr_num.trim(), 10)
+        process.env[env_key] = addrs[pos]
+        msg.send "proxy [#{env_key}] updated to [#{addrs[pos]}]."
       else
         msg.send "proxy not updated."
