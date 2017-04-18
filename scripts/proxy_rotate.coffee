@@ -28,9 +28,9 @@ module.exports = (robot) ->
       for a, i in as
         idx = Math.floor(i/4)
         if i%4==0
-          addrs[idx] = a+"."
+          addrs[idx] = "http://" +a+"."
         else if i%4==3
-          addrs[idx] += a + ":" + ps[idx]
+          addrs[idx] += a + ":" + ps[idx] + "/"
         else
           addrs[idx] += a+"."
 
