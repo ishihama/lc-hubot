@@ -25,7 +25,7 @@ module.exports = (robot) ->
     today = dt.getFullYear() + ('0' + (dt.getMonth() + 1)).slice(-2) + ('0' + dt.getDate()).slice(-2)
 
     get_day today, (animelist) ->
-      msg.send "```#{today}のアニメ情報\n#{animelist}\n```"
+      robot.send {room: "current_anime"}, "```#{today}のアニメ情報\n#{animelist}\n```"
 
   robot.respond /today_anime(.*)/i, (msg) ->
     arg = msg.match[1].split(' ')
