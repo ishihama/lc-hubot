@@ -14,7 +14,7 @@ client  = require 'cheerio-httpcli'
 
 module.exports = (robot) ->
   cronJob = new cronJob(
-    cronTime: "0 0 10 * * 1"
+    cronTime: "0 0 10 * * *"
     start: true
     timezone: "Asia/Tokyo"
     onTick: ->
@@ -83,6 +83,8 @@ module.exports = (robot) ->
       body_re = body_re.replace(/(.*)ANIMAX(.*)/g, '')
       body_re = body_re.replace(/(.*)AT-X(.*)/g, '')
       body_re = body_re.replace(/(.*)KIDS(.*)/g, '')
+      body_re = body_re.replace(/(.*)Dlife(.*)/g, '')
+      body_re = body_re.replace(/(.*)WOW(.*)/g, '')
       body_re = body_re.replace(/(.*)CTC(.*)/g, '') # チバテレビ
       body_re = body_re.replace(/(.*)GTV(.*)/g, '') # 群馬テレビ
       body_re = body_re.replace(/(.*)GYT(.*)/g, '') # 栃木テレビ
