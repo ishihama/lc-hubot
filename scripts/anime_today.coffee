@@ -14,7 +14,7 @@ client  = require 'cheerio-httpcli'
 
 module.exports = (robot) ->
   cronJob = new cronJob(
-    cronTime: "0 0 10 * * 1"
+    cronTime: "0 0 10 * * *"
     start: true
     timezone: "Asia/Tokyo"
     onTick: ->
@@ -61,7 +61,8 @@ module.exports = (robot) ->
           callback(animeList)
 
   get_anime_list = (url, callback) ->
-    # process.env.HTTP_PROXY = process.env.HUBOT_JP_HTTP_PROXY
+    original_proxy = process.env.HTTP_PROXY
+    process.env.HTTP_PROXY = process.env.HUBOT_JP_HTTP_PROXY
     client.fetch url, {'user-agent': 'node fetcher'}, (error, $ ,response, body) ->
       $ = cheerio.load body
 
@@ -82,6 +83,8 @@ module.exports = (robot) ->
       body_re = body_re.replace(/(.*)ANIMAX(.*)/g, '')
       body_re = body_re.replace(/(.*)AT-X(.*)/g, '')
       body_re = body_re.replace(/(.*)KIDS(.*)/g, '')
+      body_re = body_re.replace(/(.*)Dlife(.*)/g, '')
+      body_re = body_re.replace(/(.*)WOW(.*)/g, '')
       body_re = body_re.replace(/(.*)CTC(.*)/g, '') # チバテレビ
       body_re = body_re.replace(/(.*)GTV(.*)/g, '') # 群馬テレビ
       body_re = body_re.replace(/(.*)GYT(.*)/g, '') # 栃木テレビ
@@ -126,3 +129,8 @@ module.exports = (robot) ->
       body_re = body_re.replace(/\//g, ' \/ ')
 
       callback(body_re)
+    # proxy戻し
+    if (original_proxy)
+      process.env.HTTP_PROXY = original_proxy
+    else
+      delete process.env['HTTP_PROXY']
