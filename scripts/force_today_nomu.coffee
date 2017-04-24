@@ -50,9 +50,9 @@ module.exports = (robot) ->
         request url, (err, res, body) ->
           msg.send(msg.random(FORCE_ENTER_MESSAGES).replace("{member_id}", member_id))
     if room_name in SILENT_LEAVE_ROOM_NAME
-      ts = msg.item.ts
-      ch = msg.item.channel
-      robot.adapter.client.web.chat.delete(ts, ch)
+      ts = msg.message.item.ts
+      ch = msg.message.item.channel
+      robot.adapter.client.web.chat.delete(ts, ch, true)
 
   robot.respond /remove me/, (msg) ->
     msg.send "test"
