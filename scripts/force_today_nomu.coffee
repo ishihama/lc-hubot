@@ -35,23 +35,25 @@ FORCE_ENTER_MESSAGES = [
 ]
 
 ROOM_ID = "C0DBB44QP"
-ROOM_NAME = "レッツトゥデイ飲む"
+ROOM_NAME = ["レッツトゥデイ飲む"]
+SILENT_LEAVE_ROOM_NAME = ["test_leave"]
 
 module.exports = (robot) ->
   robot.leave (msg) ->
     member_id = msg.message.user.id
     room_name = msg.message.user.room
-    if room_name == ROOM_NAME
+    if room_name in ROOM_NAME
       # 一応、botのidには動作しないようにしておく
       if (member_id != robot.adapter.self.id)
         msg.send(msg.random(LEAVE_MESSAGES).replace("{member_id}", member_id))
         url = "https://slack.com/api/channels.invite?token=#{process.env.HUBOT_SLACK_FORCE_NOMU_TOKEN}&channel=#{ROOM_ID}&user=#{member_id}"
         request url, (err, res, body) ->
           msg.send(msg.random(FORCE_ENTER_MESSAGES).replace("{member_id}", member_id))
+    if room_name in SILENT_LEAVE_ROOM_NAME
+      ts = msg.item.ts
+      ch = msg.item.channel
+      robot.adapter.client.web.chat.delete(ts, ch)
 
   robot.respond /remove me/, (msg) ->
     msg.send "test"
-
-  robot.hear /left #test_leave/, (msg) ->
-    msg.send "逃げたね"
 
