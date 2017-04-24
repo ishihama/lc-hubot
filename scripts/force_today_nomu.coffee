@@ -35,7 +35,7 @@ FORCE_ENTER_MESSAGES = [
 ]
 
 ROOM_ID = "C0DBB44QP"
-ROOM_NAME = ["レッツトゥデイ飲む", "test_leave"]
+ROOM_NAME = ["レッツトゥデイ飲む"]
 SILENT_LEAVE_ROOM_NAME = ["test_leave"]
 
 module.exports = (robot) ->
