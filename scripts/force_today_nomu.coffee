@@ -12,6 +12,9 @@ LEAVE_MESSAGES = [
   "「こんなところにはもういられない！」そう言い残して <@{member_id}> は去っていった",
   "<@{member_id}> の・・・・霊圧が・・・消えた・・・・・",
   "ハゴー、マーヤガイッタン",
+  "やっけー、<@{member_id}> がひんぎた",
+  "ちょ、待てよ",
+  "ぬかしよる",
 ]
 
 FORCE_ENTER_MESSAGES = [
@@ -27,6 +30,8 @@ FORCE_ENTER_MESSAGES = [
   "おかえりなさい。おくまんにする？ちばちゃん？それとも、天・下・一？ BLメンバーはスナックおでん未亡人集合。",
   "ヤー、バッペータル。クマンカイ メンソーレ",
   "ヤーハエーサンケ、ワッタート サキヌマンカイサビラ",
+  "わったーくびちりどぅーしーやんに？",
+  "<@{member_id}> を連れてきたよ",
 ]
 
 ROOM_ID = "C0DBB44QP"
@@ -43,4 +48,10 @@ module.exports = (robot) ->
         url = "https://slack.com/api/channels.invite?token=#{process.env.HUBOT_SLACK_FORCE_NOMU_TOKEN}&channel=#{ROOM_ID}&user=#{member_id}"
         request url, (err, res, body) ->
           msg.send(msg.random(FORCE_ENTER_MESSAGES).replace("{member_id}", member_id))
+
+  robot.respond /remove me/, (msg) ->
+    msg.send "test"
+
+  robot.hear /left #test_leave/, (msg) ->
+    msg.send "逃げたね"
 
