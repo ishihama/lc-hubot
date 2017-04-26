@@ -38,6 +38,8 @@ ROOM_ID = "C0DBB44QP"
 ROOM_NAME = ["レッツトゥデイ飲む"]
 SILENT_LEAVE_ROOM_NAME = ["test_leave"]
 
+RUN_AWAY_BRAIN_KEY = 'force_today_nomu_run_away'
+
 module.exports = (robot) ->
   robot.leave (msg) ->
     member_id = msg.message.user.id
@@ -45,16 +47,34 @@ module.exports = (robot) ->
     if room_name in ROOM_NAME
       # 一応、botのidには動作しないようにしておく
       if (member_id != robot.adapter.self.id)
+        members = robot.brain.get(RUN_AWAY_BRAIN_KEY) ? []
+        new_members = []
+        if member_id in members
+          for m in members
+            if member_id != m
+              new_members.append(m)
+          robot.brain.set(RUN_AWAY_BRAIN_KEY, new_members)
+          return
         msg.send(msg.random(LEAVE_MESSAGES).replace("{member_id}", member_id))
         url = "https://slack.com/api/channels.invite?token=#{process.env.HUBOT_SLACK_FORCE_NOMU_TOKEN}&channel=#{ROOM_ID}&user=#{member_id}"
         request url, (err, res, body) ->
           msg.send(msg.random(FORCE_ENTER_MESSAGES).replace("{member_id}", member_id))
     if room_name in SILENT_LEAVE_ROOM_NAME
-      msg.send(JSON.stringify(msg))
-      ts = msg.message.item.ts
-      ch = msg.message.item.channel
-      robot.adapter.client.web.chat.delete(ts, ch, true)
+      channels = robot.adapter.client.web.channels.list()
+      msg.send JSON.stringify(channels)
+      for channel in channels
+        if channel.name == room_name
+          histories = robot.adapter.client.web.channels.history(channel.id)
+          msg.send JSON.stringify(histories)
+          for his_msg in histories
+            if his_msg.subtype == 'channel_leave' && his_msg.user == member_id
+              robot.adapter.client.web.chat.delete(his_mes.ts, channel.id, true)
 
-  robot.respond /remove me/, (msg) ->
-    msg.send "test"
+  robot.respond /remove me/i, (msg) ->
+    member_id = msg.message.user.id
+    members = robot.brain.get(RUN_AWAY_BRAIN_KEY) ? []
+    if member_id not in members
+      members.push member_id
+    robot.brain.set(RUN_AWAY_BRAIN_KEY, members)
+    # TODO りむる
 
