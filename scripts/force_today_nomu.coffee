@@ -69,8 +69,8 @@ module.exports = (robot) ->
             if channel.name == room_name
               slack.api "channels.history", {"channel": channel.id}, (err, res) ->
                 if res.ok
-                  msg.send JSON.stringify(res.histories)
-                  for his_msg in res.histories
+                  msg.send JSON.stringify(res.messages)
+                  for his_msg in res.messages
                     if his_msg.subtype == 'channel_leave' && his_msg.user == member_id
                       slack.api "chat.delete", {"channel": channel.id, "ts": his_msg.ts}, (err, res) ->
                         console.log(JSON.stringify(res))
