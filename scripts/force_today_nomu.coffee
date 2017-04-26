@@ -71,10 +71,10 @@ module.exports = (robot) ->
                 if res.ok
                   for his_msg in res.messages
                     if his_msg.subtype == 'channel_leave' && his_msg.user == member_id
-                      msg.send "#{channel_id}, #{his_msg.ts}"
-                      console.log(JSON.stringify(his_msg))
-                      slack.api "chat.delete", {"channel": channel_id, "ts": his_msg.ts}, (err, res) ->
+                      _slack = new Slack process.env.HUBOT_SLACK_FORCE_NOMU_TOKEN
+                      _slack.api "chat.delete", {"channel": channel_id, "ts": his_msg.ts}, (err, res) ->
                         console.log(JSON.stringify(res))
+                      return
                 else
                   console.log(JSON.stringify(res))
         else
