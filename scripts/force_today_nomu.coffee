@@ -66,13 +66,14 @@ module.exports = (robot) ->
         if res.ok
           for channel in res.channels
             if channel.name == room_name
-              slack.api "channels.history", {"channel": channel.id}, (err, res) ->
+              channel_id = channel.id
+              slack.api "channels.history", {"channel": channel_id}, (err, res) ->
                 if res.ok
                   for his_msg in res.messages
                     if his_msg.subtype == 'channel_leave' && his_msg.user == member_id
-                      msg.send "#{channel.id}, #{his_msg.ts}"
+                      msg.send "#{channel_id}, #{his_msg.ts}"
                       console.log(JSON.stringify(his_msg))
-                      slack.api "chat.delete", {"channel": channel.id, "ts": his_msg.ts}, (err, res) ->
+                      slack.api "chat.delete", {"channel": channel_id, "ts": his_msg.ts}, (err, res) ->
                         console.log(JSON.stringify(res))
                 else
                   console.log(JSON.stringify(res))
