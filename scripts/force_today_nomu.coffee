@@ -70,6 +70,8 @@ module.exports = (robot) ->
                 if res.ok
                   for his_msg in res.messages
                     if his_msg.subtype == 'channel_leave' && his_msg.user == member_id
+                      msg.send "#{channel.id}, #{his_msg.ts}"
+                      console.log(JSON.stringify(his_msg))
                       slack.api "chat.delete", {"channel": channel.id, "ts": his_msg.ts}, (err, res) ->
                         console.log(JSON.stringify(res))
                 else
