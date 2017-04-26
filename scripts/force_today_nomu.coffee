@@ -6,6 +6,7 @@
 #
 
 request = require 'request'
+Slack = require 'slack-node'
 
 LEAVE_MESSAGES = [
   "<@{member_id}> は逃げ出した",
@@ -60,21 +61,35 @@ module.exports = (robot) ->
         request url, (err, res, body) ->
           msg.send(msg.random(FORCE_ENTER_MESSAGES).replace("{member_id}", member_id))
     if room_name in SILENT_LEAVE_ROOM_NAME
-      channels = robot.adapter.client.web.channels.list()
-      msg.send JSON.stringify(channels)
-      for channel in channels
-        if channel.name == room_name
-          histories = robot.adapter.client.web.channels.history(channel.id)
-          msg.send JSON.stringify(histories)
-          for his_msg in histories
-            if his_msg.subtype == 'channel_leave' && his_msg.user == member_id
-              robot.adapter.client.web.chat.delete(his_mes.ts, channel.id, true)
+      slack = new Slack process.env.HUBOT_SLACK_TOKEN
+      slack.api "channels.list", {}, (err, res) ->
+        if res.ok
+          msg.send JSON.stringify(res.channels)
+          for channel in res.channels
+            if channel.name == room_name
+              slack.api "channels.history", {"channel": channel.id}, (err, res) ->
+                if res.ok
+                  msg.send JSON.stringify(res.histories)
+                  for his_msg in res.histories
+                    if his_msg.subtype == 'channel_leave' && his_msg.user == member_id
+                      slack.api "chat.delete", {"channel": channel.id, "ts": his_msg.ts}, (err, res) ->
+                        console.log(JSON.stringify(res))
+                else
+                  console.log(JSON.stringify(res))
+        else
+          console.log(JSON.stringify(res))
 
   robot.respond /remove me/i, (msg) ->
     member_id = msg.message.user.id
+    room_name = msg.message.user.room
+    if room_name not in ROOM_NAME
+      return
     members = robot.brain.get(RUN_AWAY_BRAIN_KEY) ? []
     if member_id not in members
       members.push member_id
     robot.brain.set(RUN_AWAY_BRAIN_KEY, members)
-    # TODO りむる
-
+    slack = new Slack process.env.HUBOT_SLACK_FORCE_NOMU_TOKEN
+    slack.api "channels.kick", {"channel", ROOM_ID, "user": member_id}, (err, res) ->
+      if res.ok
+        return
+  
