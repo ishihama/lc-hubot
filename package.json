@@ -32,12 +32,14 @@
     "hubot-scripts": ">= 2.5.0 < 3.0.0",
     "hubot-slack": "^3.4.1",
     "hubot-slack-timeline": "^0.2.2",
-    "hubot-tabelog": "0.0.4",
     "hubot-todos": "0.0.5",
     "iconv": "^2.2.1",
     "request": "^2.42.0",
     "xml2js": "0.2.8",
-    "xmljson": "0.2.0"
+    "xmljson": "0.2.0",
+    "q": "1.4.1",
+    "bluebird": "3.5.0",
+    "slack-node": "^0.1.8"
   },
   "engines": {
     "node": ">= 0.8.x",

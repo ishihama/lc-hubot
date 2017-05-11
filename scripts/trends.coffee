@@ -161,7 +161,7 @@ module.exports = (robot) ->
   robot.respond /trends( ([a-zA-Z]{2}))/i, (msg) ->
     region = getRegion(msg.match[2], regions)
     options =
-      url: 'http://www.google.com/trends/hottrends/hotItems'
+      url: 'https://trends.google.co.jp/trends/hottrends/hotItems'
       timeout: 2000
       headers: {'user-agent': 'node fetcher'}
       form:
