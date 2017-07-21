@@ -130,7 +130,7 @@ module.exports = (robot) ->
         max_cost: '100'
       }
     request options,  (error,  response,  body) ->
-      msg_array = []
+      msg_array = ["https://highemerly.net/dominion/"]
       if !error && response.statusCode == 200
         for key, value of CARD_CATEGORYS
           if body.cardlists[key]
