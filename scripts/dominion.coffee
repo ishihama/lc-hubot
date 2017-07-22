@@ -22,6 +22,8 @@ PACKAGES =
   "set8": ["ギルド", "ぎるど"]
   "set9": ["冒険", "ぼうけん", "ぼうけｎ", "某県"]
   "set10": ["帝国", "ていこく", "定刻", "帝國"]
+
+ADDITIONAL_PACKAGES =
   "set0_2": ["基本2nd", "基本2", "基本２", "きほん２", "きほん2"]
   "set1_2": ["陰謀2nd", "陰謀2", "陰謀２", "いんぼう２", "いんぼう2"]
 
@@ -108,6 +110,8 @@ outputHelp = (msg) ->
   package_names = []
   for key, value of PACKAGES
     package_names.push value[0]
+  for key, value of ADDITIONAL_PACKAGES
+    package_names.push value[0]
 
   messages.push package_names.join(', ')
   messages.push "-------- プロモカードの指定 --------"
@@ -126,7 +130,9 @@ module.exports = (robot) ->
       return
     # パラメータから使用するパッケージを特定
     params = msg.match[1].split(/\s+/)
-    package_settings = selectPackages(PACKAGES, params)
+    package_settings = {}
+    package_settings = Object.assign(package_settings, selectPackages(PACKAGES, params))
+    package_settings = Object.assign(package_settings, selectPackages(ADDITIONAL_PACKAGES, params))
     # 錬金術が明示されていればforce_alchemyフラグを立てる
     force_alchemy = 0
     if package_settings['set3']
