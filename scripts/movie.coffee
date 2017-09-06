@@ -32,29 +32,21 @@ module.exports = (robot) ->
     request options,  (error,  response,  body) ->
       $ = cheerio.load body
 
-      #desc = $('rss').children('channel').children('title').text()
-      #text = desc
-
       for item in $('item')
         title = item['children'][0]['children'][0]['data']
         url = item['children'][4]['children'][0]['data']
-        #text = text + "\n" + title + ": <" + url + ">"
         text = text + "\n<" + url + "|" + title + ">"
 
       data =
         content:
-          color: "00ff00"
-          fallback: "Sumally ....."
+          color: "439FE0"
+          fallback: "今週公開の映画"
           title: "今週公開の映画"
           title_link: "http://eiga.com/upcoming/"
           text: text
           mrkdwn_in: ["text"]
         #channel: msg.envelope.room
-        channel: "test"
-        #username: "bot_name"
-        #icon_emoji: ":emoji:"
+        channel: "movie"
 
-      #robot.send {room: "movie"}, text
-      #robot.send {room: "test"}, text
-      robot.emit "slack.attachment",  data
+      robot.emit "slack.attachment", data
 
