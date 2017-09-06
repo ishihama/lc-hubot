@@ -41,5 +41,20 @@ module.exports = (robot) ->
         text = text + "\n" + title + ":<" + url + ">"
 
       #robot.send {room: "movie"}, text
-      robot.send {room: "test"}, text
+      #robot.send {room: "test"}, text
+
+      data =
+        content:
+        color: "00ff00"
+        fallback: "Sumally ....."
+        title: "今週公開の映画"
+        title_link: "http://eiga.com/upcoming/"
+        text: text
+        mrkdwn_in: ["text"]
+        #channel: msg.envelope.room
+        channel: test
+        #username: "bot_name"
+        #icon_emoji: ":emoji:"
+      robot.emit "slack.attachment",  data
+
 
