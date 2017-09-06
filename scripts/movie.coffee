@@ -38,7 +38,8 @@ module.exports = (robot) ->
       for item in $('item')
         title = item['children'][0]['children'][0]['data']
         url = item['children'][4]['children'][0]['data']
-        text = text + "\n" + title + " / " + url
+        text = text + "\n" + title + ":< " + url + ">"
 
-      robot.send {room: "movie"}, text
+      #robot.send {room: "movie"}, text
+      robot.send {room: "test"}, text
 
