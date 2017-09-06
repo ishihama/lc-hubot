@@ -46,8 +46,7 @@ module.exports = (robot) ->
           text: text
           mrkdwn_in: ["text"]
         #channel: msg.envelope.room
-        channel: "test"
-        #channel: "movie"
+        channel: "movie"
 
       robot.emit "slack.attachment", data
 
