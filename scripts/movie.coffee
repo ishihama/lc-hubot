@@ -35,10 +35,15 @@ module.exports = (robot) ->
       desc = $('rss').children('channel').children('title').text()
       text = desc
 
+      isFirst = true
       for item in $('item')
+        if isFirst == true
+          isFisrst = false
+          continue
+
         title = item['children'][0]['children'][0]['data']
         url = item['children'][4]['children'][0]['data']
-        text = text + "\n" + title + ":<" + url + ">"
+        text = text + "\n" + title + ": <" + url + ">"
 
       data =
         content:
