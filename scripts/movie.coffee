@@ -49,7 +49,7 @@ module.exports = (robot) ->
           text: text
           mrkdwn_in: ["text"]
         #channel: msg.envelope.room
-        channel: test
+        channel: "test"
         #username: "bot_name"
         #icon_emoji: ":emoji:"
 
