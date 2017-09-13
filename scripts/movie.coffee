@@ -32,21 +32,13 @@ module.exports = (robot) ->
     request options,  (error,  response,  body) ->
       $ = cheerio.load body
 
+      text = "```今週公開の映画 http://eiga.com/upcoming/"
+
       for item in $('item')
         title = item['children'][0]['children'][0]['data']
         url = item['children'][4]['children'][0]['data']
-        text = text + "\n<" + url + "|" + title + ">"
+        text = text + "\n" + title + " / " + url
 
-      data =
-        content:
-          color: "439FE0"
-          fallback: "今週公開の映画"
-          title: "今週公開の映画"
-          title_link: "http://eiga.com/upcoming/"
-          text: text
-          mrkdwn_in: ["text"]
-        #channel: msg.envelope.room
-        channel: "movie"
-
-      robot.emit "slack.attachment", data
+      text = text + "```"
+      robot.send {room: "test"}, text
 
