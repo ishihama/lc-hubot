@@ -19,6 +19,7 @@ LEAVE_MESSAGES = [
 ]
 
 FORCE_ENTER_MESSAGES = [
+  "去るがよい。",
   "逃げられると思ったか？",
   "逃がさない",
   "おかえりなさい！みんなで仲良く楽しくやっていきましょう！",
@@ -45,7 +46,8 @@ module.exports = (robot) ->
   robot.leave (msg) ->
     member_id = msg.message.user.id
     room_name = msg.message.user.room
-    if room_name in ROOM_NAME
+    target_rooms = process.env.FORCE_NOMU_ROOMS.split(",")
+    if room_name in target_rooms
       # 一応、botのidには動作しないようにしておく
       if (member_id != robot.adapter.self.id)
         members = robot.brain.get(RUN_AWAY_BRAIN_KEY) ? []
@@ -58,8 +60,12 @@ module.exports = (robot) ->
           return
         msg.send(msg.random(LEAVE_MESSAGES).replace("{member_id}", member_id))
         url = "https://slack.com/api/channels.invite?token=#{process.env.HUBOT_SLACK_FORCE_NOMU_TOKEN}&channel=#{ROOM_ID}&user=#{member_id}"
-        request url, (err, res, body) ->
-          msg.send(msg.random(FORCE_ENTER_MESSAGES).replace("{member_id}", member_id))
+        enter_message = msg.random(FORCE_ENTER_MESSAGES)
+        if FORCE_ENTER_MESSAGES.indexOf(enter_message) == 0
+          msg.send(enter_message)
+        else
+          request url, (err, res, body) ->
+            msg.send(enter_message.replace("{member_id}", member_id))
     if room_name in SILENT_LEAVE_ROOM_NAME
       slack = new Slack process.env.HUBOT_SLACK_TOKEN
       slack.api "channels.list", {}, (err, res) ->
