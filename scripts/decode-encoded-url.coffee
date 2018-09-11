@@ -1,16 +1,18 @@
 # Description:
 #   encodeされたURLを日本語に戻す
 #
+# Commands:
+#   hubot decode ENCODED_URL
+#
 # Author:
-#   @shokai
+#
 
 module.exports = (robot) ->
 
-  robot.hear /(https?:\/\/[^ ]+)/i,  (msg) ->
-
-    who = msg.message.user.name
+  robot.respond /decode (.+)$/i, (msg) ->
     url = msg.match[1]
     return if url is decodeURI url
     url = decodeURI(url).replace /[ <>]/g,  (c) -> encodeURI c
-    msg.send "@#{who} 日本語でおｋ\n#{url}"
+    msg.send "日本語でおｋ\n#{url}"
 
+    return
