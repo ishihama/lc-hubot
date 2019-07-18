@@ -69,7 +69,7 @@ module.exports = (robot) ->
         # 引数チェック
         arg = msg.match[1].split(' ')
         conf = new Conf()
-        if arg.length <= 2
+        if arg.length < 2
           msg.send conf.help_list()
         else if arg.length <= 4
           yosan_kbn = 13
