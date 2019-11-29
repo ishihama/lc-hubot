@@ -2,10 +2,9 @@
 #   おすすめランチをランダムで1件表示
 #
 # Commands:
-#   hubot lunch
-#   hubot lunch yaesu
-#   hubot lunch 八重洲 寿司 1000
-#   hubot nomu 八重洲
+#   hubot <lunch|nomu>
+#   hubot <lunch|nomu> yaesu
+#   hubot <lunch|nomu> 八重洲 寿司 1000
 #
 # Notes:
 #
@@ -23,10 +22,10 @@ class Conf
   help_list: ->
     rtn_str = "〜使い方〜"
     rtn_str = rtn_str + "\n" + "後ろに食べたいジャンルを入れたら、エリア近辺の料理を表示するよ"
-    rtn_str = rtn_str + "\n" + "shibazo lunch yaesu 寿司"
-    rtn_str = rtn_str + "\n" + "shibazo lunch 八重洲 寿司"
+    rtn_str = rtn_str + "\n" + "shibazo <lunch|nomu> yaesu 寿司"
+    rtn_str = rtn_str + "\n" + "shibazo <lunch|nomu> 八重洲 寿司"
     rtn_str = rtn_str + "\n" + "さらに後ろに予算を入力すると、予算内のお店を検索するよ"
-    rtn_str = rtn_str + "\n" + "shibazo lunch 八重洲 寿司 1000"
+    rtn_str = rtn_str + "\n" + "shibazo <lunch|nomu> 八重洲 寿司 1000"
 
     return rtn_str
 
